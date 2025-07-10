@@ -9,16 +9,16 @@
 High-performance overlay network engine with transport layer abstraction and packet switching capabilities.
 
 ## 주요 기능 / Key Features
-- 🔌 **다중 프로토콜 지원**: WebRTC, HTTP/HTTPS, TCP/UDP 등  
-  **Multi-protocol Support**: WebRTC, HTTP/HTTPS, TCP/UDP, etc.
+- 🔌 **다중 프로토콜 지원**: WebRTC, HTTP/HTTPS, WS/WSS, TCP/UDP 등
+  **Multi-protocol Support**: WebRTC, HTTP/HTTPS, WS/WSS, TCP/UDP, etc.
 - ⚡ **레이턴시 최적화 라우팅**: 실시간 네트워크 메트릭 기반 경로 선택  
   **Latency-optimized Routing**: Real-time network metric based path selection
 - 🔄 **동적 부하 분산**: 노드 리소스 사용량에 따른 트래픽 분배  
   **Dynamic Load Balancing**: Traffic distribution based on node resource usage
 - 🔒 **엔드투엔드 암호화**: ECIES + Ed25519 조합의 강력한 보안  
   **End-to-end Encryption**: Strong security with ECIES + Ed25519 combination
-- 🌐 **네트워크 분리 지원**: I2P 스타일 네트워크 ID 기반 격리  
-  **Network Isolation**: I2P-style network ID based isolation
+- 🌐 **네트워크 분리 지원**: 숫자 기반 네트워크 ID 격리
+  **Network Isolation**: Numeric network ID based isolation
 
 ## 아키텍처 개요 / Architecture Overview
 ```mermaid
@@ -116,7 +116,7 @@ cfg.Routing.MetricWeights = config.MetricWeights{
 ## 문서 / Documentation
 - [RFC-0001: 오버레이 네트워크 아키텍처](docs/rfc/0001-overlay-network-architecture.md)  
   - Core architecture and component relationships
-- [RFC-0002: 멀티어드레스 형식](docs/rfc/0002-multiaddress-format.md)  
+- [RFC-0002: 주소 형식 사양](docs/rfc/0002-multiaddress-format.md)
   - Address format specification and encoding rules
 - [RFC-0003: 패킷 라우팅 프로토콜](docs/rfc/0003-packet-routing.md)  
   - Packet routing algorithms and congestion control

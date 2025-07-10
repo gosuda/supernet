@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package maddr;
+
+option go_package = "gosuda.org/supernet/proto/maddr;maddr";
+
+enum Protocol {
+  PROTOCOL_UNSPECIFIED = 0;
+  PROTOCOL_IP4 = 1;
+  PROTOCOL_IP6 = 2;
+  PROTOCOL_TCP = 3;
+  PROTOCOL_UDP = 4;
+  PROTOCOL_WEBRTC_DIRECT = 5;
+  PROTOCOL_WEBRTC_SIGNAL = 6;
+  PROTOCOL_HTTP = 7;
+  PROTOCOL_HTTPS = 8;
+  PROTOCOL_WS = 9;
+  PROTOCOL_WSS = 10;
+}
+
+message Address {
+  uint64 network_id = 1;
+  Protocol protocol = 2;
+  optional Address relay_address = 3;
+}
+
+message AddressSet {
+  repeated Address addresses = 1;
+  repeated Protocol client_protocols = 2;
+}
