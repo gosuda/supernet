@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package snverb;
+
+import "proto/maddr/v1alpha1/maddr.proto";
+
+option go_package = "gosuda.org/supernet/proto/snverb/v1alpha1;snverb";
+
+enum Algorithm {
+  ED25519 = 0;
+  ED448 = 1;
+
+  MLDSA44 = 2;
+  MLDSA65 = 3;
+  MLDSA87 = 4;
+
+  X25519 = 5;
+  X448 = 6;
+
+  MLKEM512 = 7;
+  MLKEM768 = 8;
+  MLKEM1024 = 9;
+}
+
+enum MultiSignaturePolicy {
+  REQUIRE_ALL = 0; // All signatures are required
+  REQUIRE_ANY = 1; // Any signature is sufficient
+  REQUIRE_QUORUM = 2; // A quorum of signatures is required
+}
+
+message SignaturePolicy {
+  int64 total_signers = 1; // Total number of available signers
+  int64 total_signatures = 2; // Total number of signatures
+  int64 threshold = 3; // Minimum number of vaild signatures required
+  MultiSignaturePolicy multi_signature = 4; // Type of multi-signature policy
+}
+
+message SignaturePayload {
+  int64 timestamp = 1; // Unix timestamp in seconds
+  int64 nonce = 2; // Unique nonce for the signature
+  SignaturePolicy policy = 3; // Signature policy
+  bytes data = 4; // Data to be signed
+}
+
+message PublicKey {
+  Algorithm algorithm = 1;
+  bytes key = 2;
+}
+
+message Signature {
+  Algorithm algorithm = 1;
+  bytes signature = 2;
+}
+
+message Identity {
+  repeated PublicKey public_keys = 1; // List of public keys
+}
+
+message NodeMetadata {
+  maddr.AddressSet address = 1; // Node address
+  Identity identity = 2; // Node identity
+}
