@@ -2,7 +2,7 @@
 // protoc-gen-go-vtproto version: v0.6.0
 // source: proto/maddr/v1alpha1/maddr.proto
 
-package v1alpha1
+package maddr
 
 import (
 	fmt "fmt"

@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: proto/maddr/v1alpha1/maddr.proto
 
-package v1alpha1
+package maddr
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -228,9 +228,9 @@ const file_proto_maddr_v1alpha1_maddr_proto_rawDesc = "" +
 	"\rPROTOCOL_HTTP\x10\x06\x12\x12\n" +
 	"\x0ePROTOCOL_HTTPS\x10\a\x12\x0f\n" +
 	"\vPROTOCOL_WS\x10\b\x12\x10\n" +
-	"\fPROTOCOL_WSS\x10\tBy\n" +
+	"\fPROTOCOL_WSS\x10\tB{\n" +
 	"\tcom.maddrB\n" +
-	"MaddrProtoP\x01Z,gosuda.org/supernet/gen/proto/maddr/v1alpha1\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
+	"MaddrProtoP\x01Z.gosuda.org/supernet/proto/maddr/v1alpha1;maddr\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
 
 var (
 	file_proto_maddr_v1alpha1_maddr_proto_rawDescOnce sync.Once
