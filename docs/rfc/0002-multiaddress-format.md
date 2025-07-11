@@ -19,12 +19,11 @@ enum Protocol {
   PROTOCOL_IP6 = 2;
   PROTOCOL_TCP = 3;
   PROTOCOL_UDP = 4;
-  PROTOCOL_WEBRTC_DIRECT = 5;
-  PROTOCOL_WEBRTC_SIGNAL = 6;
-  PROTOCOL_HTTP = 7;
-  PROTOCOL_HTTPS = 8;
-  PROTOCOL_WS = 9;
-  PROTOCOL_WSS = 10;
+  PROTOCOL_WEBRTC_SIGNAL = 5;
+  PROTOCOL_HTTP = 6;
+  PROTOCOL_HTTPS = 7;
+  PROTOCOL_WS = 8;
+  PROTOCOL_WSS = 9;
 }
 
 message Address {
@@ -46,7 +45,7 @@ message AddressSet {
 
 ### 3.2. Text Representation
 ```
-/network/1234/proto/tcp/192.0.2.1:443/relay/proto/webrtc-direct
+/network/1234/proto/tcp/192.0.2.1:443/relay/proto/webrtc-signal
 ```
 
 ## 4. Protocol Usage Guidelines
@@ -54,7 +53,6 @@ message AddressSet {
 |---------------------|-----------------------------------|----------------|
 | IP4/IP6             | Direct IPv4/IPv6 connections      | No             |
 | TCP/UDP             | Standard TCP/UDP transport        | No             |
-| WEBRTC_DIRECT       | WebRTC with direct connectivity   | No             |
 | WEBRTC_SIGNAL       | WebRTC signaling channel          | Yes            |
 | HTTP/HTTPS          | HTTP-based transports             | Optional       |
 | WS/WSS              | WebSocket connections             | Optional       |
@@ -66,7 +64,7 @@ addr := &maddr.Address{
   NetworkId: 1234,
   Protocol: maddr.Protocol_PROTOCOL_TCP,
   RelayAddress: &maddr.Address{
-    Protocol: maddr.Protocol_PROTOCOL_WEBRTC_DIRECT,
+    Protocol: maddr.Protocol_PROTOCOL_WEBRTC_SIGNAL,
   },
 }
 

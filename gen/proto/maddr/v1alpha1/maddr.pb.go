@@ -29,10 +29,11 @@ const (
 	Protocol_PROTOCOL_IP6           Protocol = 2
 	Protocol_PROTOCOL_TCP           Protocol = 3
 	Protocol_PROTOCOL_UDP           Protocol = 4
-	Protocol_PROTOCOL_WEBRTC_DIRECT Protocol = 5
-	Protocol_PROTOCOL_WEBRTC_SIGNAL Protocol = 6
-	Protocol_PROTOCOL_HTTP          Protocol = 7
-	Protocol_PROTOCOL_HTTPS         Protocol = 8
+	Protocol_PROTOCOL_WEBRTC_SIGNAL Protocol = 5
+	Protocol_PROTOCOL_HTTP          Protocol = 6
+	Protocol_PROTOCOL_HTTPS         Protocol = 7
+	Protocol_PROTOCOL_WS            Protocol = 8
+	Protocol_PROTOCOL_WSS           Protocol = 9
 )
 
 // Enum value maps for Protocol.
@@ -43,10 +44,11 @@ var (
 		2: "PROTOCOL_IP6",
 		3: "PROTOCOL_TCP",
 		4: "PROTOCOL_UDP",
-		5: "PROTOCOL_WEBRTC_DIRECT",
-		6: "PROTOCOL_WEBRTC_SIGNAL",
-		7: "PROTOCOL_HTTP",
-		8: "PROTOCOL_HTTPS",
+		5: "PROTOCOL_WEBRTC_SIGNAL",
+		6: "PROTOCOL_HTTP",
+		7: "PROTOCOL_HTTPS",
+		8: "PROTOCOL_WS",
+		9: "PROTOCOL_WSS",
 	}
 	Protocol_value = map[string]int32{
 		"PROTOCOL_UNSPECIFIED":   0,
@@ -54,10 +56,11 @@ var (
 		"PROTOCOL_IP6":           2,
 		"PROTOCOL_TCP":           3,
 		"PROTOCOL_UDP":           4,
-		"PROTOCOL_WEBRTC_DIRECT": 5,
-		"PROTOCOL_WEBRTC_SIGNAL": 6,
-		"PROTOCOL_HTTP":          7,
-		"PROTOCOL_HTTPS":         8,
+		"PROTOCOL_WEBRTC_SIGNAL": 5,
+		"PROTOCOL_HTTP":          6,
+		"PROTOCOL_HTTPS":         7,
+		"PROTOCOL_WS":            8,
+		"PROTOCOL_WSS":           9,
 	}
 )
 
@@ -214,17 +217,18 @@ const file_proto_maddr_v1alpha1_maddr_proto_rawDesc = "" +
 	"\n" +
 	"AddressSet\x12,\n" +
 	"\taddresses\x18\x01 \x03(\v2\x0e.maddr.AddressR\taddresses\x12:\n" +
-	"\x10client_protocols\x18\x02 \x03(\x0e2\x0f.maddr.ProtocolR\x0fclientProtocols*\xcb\x01\n" +
+	"\x10client_protocols\x18\x02 \x03(\x0e2\x0f.maddr.ProtocolR\x0fclientProtocols*\xd2\x01\n" +
 	"\bProtocol\x12\x18\n" +
 	"\x14PROTOCOL_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fPROTOCOL_IP4\x10\x01\x12\x10\n" +
 	"\fPROTOCOL_IP6\x10\x02\x12\x10\n" +
 	"\fPROTOCOL_TCP\x10\x03\x12\x10\n" +
 	"\fPROTOCOL_UDP\x10\x04\x12\x1a\n" +
-	"\x16PROTOCOL_WEBRTC_DIRECT\x10\x05\x12\x1a\n" +
-	"\x16PROTOCOL_WEBRTC_SIGNAL\x10\x06\x12\x11\n" +
-	"\rPROTOCOL_HTTP\x10\a\x12\x12\n" +
-	"\x0ePROTOCOL_HTTPS\x10\bBy\n" +
+	"\x16PROTOCOL_WEBRTC_SIGNAL\x10\x05\x12\x11\n" +
+	"\rPROTOCOL_HTTP\x10\x06\x12\x12\n" +
+	"\x0ePROTOCOL_HTTPS\x10\a\x12\x0f\n" +
+	"\vPROTOCOL_WS\x10\b\x12\x10\n" +
+	"\fPROTOCOL_WSS\x10\tBy\n" +
 	"\tcom.maddrB\n" +
 	"MaddrProtoP\x01Z,gosuda.org/supernet/gen/proto/maddr/v1alpha1\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
 
