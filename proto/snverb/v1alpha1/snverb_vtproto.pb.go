@@ -138,10 +138,10 @@ func (m *NodeMetadata) CloneVT() *NodeMetadata {
 	r := new(NodeMetadata)
 	r.Identity = m.Identity.CloneVT()
 	if rhs := m.Address; rhs != nil {
-		if vtpb, ok := interface{}(rhs).(interface{ CloneVT() *v1alpha1.AddressSet }); ok {
+		if vtpb, ok := interface{}(rhs).(interface{ CloneVT() *v1alpha1.AddressList }); ok {
 			r.Address = vtpb.CloneVT()
 		} else {
-			r.Address = proto.Clone(rhs).(*v1alpha1.AddressSet)
+			r.Address = proto.Clone(rhs).(*v1alpha1.AddressList)
 		}
 	}
 	if len(m.unknownFields) > 0 {
@@ -295,7 +295,7 @@ func (this *NodeMetadata) EqualVT(that *NodeMetadata) bool {
 		return false
 	}
 	if equal, ok := interface{}(this.Address).(interface {
-		EqualVT(*v1alpha1.AddressSet) bool
+		EqualVT(*v1alpha1.AddressList) bool
 	}); ok {
 		if !equal.EqualVT(that.Address) {
 			return false
@@ -1700,7 +1700,7 @@ func (m *NodeMetadata) UnmarshalVT(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Address == nil {
-				m.Address = &v1alpha1.AddressSet{}
+				m.Address = &v1alpha1.AddressList{}
 			}
 			if unmarshal, ok := interface{}(m.Address).(interface {
 				UnmarshalVT([]byte) error
@@ -2401,7 +2401,7 @@ func (m *NodeMetadata) UnmarshalVTUnsafe(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Address == nil {
-				m.Address = &v1alpha1.AddressSet{}
+				m.Address = &v1alpha1.AddressList{}
 			}
 			if unmarshal, ok := interface{}(m.Address).(interface {
 				UnmarshalVTUnsafe([]byte) error

@@ -57,6 +57,6 @@ message Identity {
 }
 
 message NodeMetadata {
-  maddr.AddressSet address = 1; // Node address
+  maddr.AddressList address = 1; // Node address
   Identity identity = 2; // Node identity
 }

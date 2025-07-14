@@ -24,43 +24,70 @@ const (
 type Protocol int32
 
 const (
-	Protocol_PROTOCOL_UNSPECIFIED   Protocol = 0
-	Protocol_PROTOCOL_IP4           Protocol = 1
-	Protocol_PROTOCOL_IP6           Protocol = 2
-	Protocol_PROTOCOL_TCP           Protocol = 3
-	Protocol_PROTOCOL_UDP           Protocol = 4
-	Protocol_PROTOCOL_WEBRTC_SIGNAL Protocol = 5
-	Protocol_PROTOCOL_HTTP          Protocol = 6
-	Protocol_PROTOCOL_HTTPS         Protocol = 7
-	Protocol_PROTOCOL_WS            Protocol = 8
-	Protocol_PROTOCOL_WSS           Protocol = 9
+	Protocol_PROTOCOL_UNSPECIFIED  Protocol = 0
+	Protocol_PROTOCOL_IP4          Protocol = 1  // IPv4 address, e.g., "1.1.1.1"
+	Protocol_PROTOCOL_IP6          Protocol = 2  // IPv6 address, e.g., "2606:4700:4700::1111"
+	Protocol_PROTOCOL_DNS4         Protocol = 3  // DNS address, e.g., "example.com"
+	Protocol_PROTOCOL_DNS6         Protocol = 4  // DNS address with IPv6, e.g., "example.com"
+	Protocol_PROTOCOL_TCP          Protocol = 5  // TCP protocol and port, e.g., "7496"
+	Protocol_PROTOCOL_UDP          Protocol = 6  // UDP protocol and port, e.g., "7496"
+	Protocol_PROTOCOL_QUIC         Protocol = 7  // QUIC protocol and port, e.g., "7496" with optional associated Certificate Fingerprint
+	Protocol_PROTOCOL_HTTP         Protocol = 8  // HTTP protocol, with streaming support
+	Protocol_PROTOCOL_GRPC         Protocol = 9  // gRPC protocol, with streaming support
+	Protocol_PROTOCOL_WEBRTC       Protocol = 10 // WebRTC Data Channel Transport
+	Protocol_PROTOCOL_WEBSOCKET    Protocol = 11 // WebSocket protocol, with streaming support
+	Protocol_PROTOCOL_WEBTRANSPORT Protocol = 12 // WebTransport protocol, with streaming support
+	Protocol_PROTOCOL_BLE          Protocol = 20 // Bluetooth Low Energy protocol WIP
+	Protocol_PROTOCOL_UWB          Protocol = 21 // Ultra-Wideband protocol WIP
+	Protocol_PROTOCOL_LORA         Protocol = 22 // LoRA protocol WIP
+	Protocol_PROTOCOL_ZWAVE        Protocol = 23 // Z-Wave protocol WIP
+	Protocol_PROTOCOL_ZIGBEE       Protocol = 24 // Zigbee protocol WIP
+	Protocol_PROTOCOL_SNRELAY      Protocol = 30 // SuperNet Relay Protocol
 )
 
 // Enum value maps for Protocol.
 var (
 	Protocol_name = map[int32]string{
-		0: "PROTOCOL_UNSPECIFIED",
-		1: "PROTOCOL_IP4",
-		2: "PROTOCOL_IP6",
-		3: "PROTOCOL_TCP",
-		4: "PROTOCOL_UDP",
-		5: "PROTOCOL_WEBRTC_SIGNAL",
-		6: "PROTOCOL_HTTP",
-		7: "PROTOCOL_HTTPS",
-		8: "PROTOCOL_WS",
-		9: "PROTOCOL_WSS",
+		0:  "PROTOCOL_UNSPECIFIED",
+		1:  "PROTOCOL_IP4",
+		2:  "PROTOCOL_IP6",
+		3:  "PROTOCOL_DNS4",
+		4:  "PROTOCOL_DNS6",
+		5:  "PROTOCOL_TCP",
+		6:  "PROTOCOL_UDP",
+		7:  "PROTOCOL_QUIC",
+		8:  "PROTOCOL_HTTP",
+		9:  "PROTOCOL_GRPC",
+		10: "PROTOCOL_WEBRTC",
+		11: "PROTOCOL_WEBSOCKET",
+		12: "PROTOCOL_WEBTRANSPORT",
+		20: "PROTOCOL_BLE",
+		21: "PROTOCOL_UWB",
+		22: "PROTOCOL_LORA",
+		23: "PROTOCOL_ZWAVE",
+		24: "PROTOCOL_ZIGBEE",
+		30: "PROTOCOL_SNRELAY",
 	}
 	Protocol_value = map[string]int32{
-		"PROTOCOL_UNSPECIFIED":   0,
-		"PROTOCOL_IP4":           1,
-		"PROTOCOL_IP6":           2,
-		"PROTOCOL_TCP":           3,
-		"PROTOCOL_UDP":           4,
-		"PROTOCOL_WEBRTC_SIGNAL": 5,
-		"PROTOCOL_HTTP":          6,
-		"PROTOCOL_HTTPS":         7,
-		"PROTOCOL_WS":            8,
-		"PROTOCOL_WSS":           9,
+		"PROTOCOL_UNSPECIFIED":  0,
+		"PROTOCOL_IP4":          1,
+		"PROTOCOL_IP6":          2,
+		"PROTOCOL_DNS4":         3,
+		"PROTOCOL_DNS6":         4,
+		"PROTOCOL_TCP":          5,
+		"PROTOCOL_UDP":          6,
+		"PROTOCOL_QUIC":         7,
+		"PROTOCOL_HTTP":         8,
+		"PROTOCOL_GRPC":         9,
+		"PROTOCOL_WEBRTC":       10,
+		"PROTOCOL_WEBSOCKET":    11,
+		"PROTOCOL_WEBTRANSPORT": 12,
+		"PROTOCOL_BLE":          20,
+		"PROTOCOL_UWB":          21,
+		"PROTOCOL_LORA":         22,
+		"PROTOCOL_ZWAVE":        23,
+		"PROTOCOL_ZIGBEE":       24,
+		"PROTOCOL_SNRELAY":      30,
 	}
 )
 
@@ -92,12 +119,14 @@ func (Protocol) EnumDescriptor() ([]byte, []int) {
 }
 
 type Address struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	NetworkId     uint64                 `protobuf:"varint,1,opt,name=network_id,json=networkId,proto3" json:"network_id,omitempty"`
-	Protocol      Protocol               `protobuf:"varint,2,opt,name=protocol,proto3,enum=maddr.Protocol" json:"protocol,omitempty"`
-	RelayAddress  *Address               `protobuf:"bytes,3,opt,name=relay_address,json=relayAddress,proto3,oneof" json:"relay_address,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Protocol       Protocol               `protobuf:"varint,1,opt,name=protocol,proto3,enum=maddr.Protocol" json:"protocol,omitempty"` // Protocol type of the address
+	Address        []byte                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`                        // address data
+	Local          *Address               `protobuf:"bytes,3,opt,name=local,proto3,oneof" json:"local,omitempty"`
+	Identifier     []byte                 `protobuf:"bytes,4,opt,name=identifier,proto3,oneof" json:"identifier,omitempty"`                               // Unique identifier for the address
+	AssociatedData []byte                 `protobuf:"bytes,5,opt,name=associated_data,json=associatedData,proto3,oneof" json:"associated_data,omitempty"` // Additional data associated with the address
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Address) Reset() {
@@ -130,13 +159,6 @@ func (*Address) Descriptor() ([]byte, []int) {
 	return file_proto_maddr_v1alpha1_maddr_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Address) GetNetworkId() uint64 {
-	if x != nil {
-		return x.NetworkId
-	}
-	return 0
-}
-
 func (x *Address) GetProtocol() Protocol {
 	if x != nil {
 		return x.Protocol
@@ -144,14 +166,35 @@ func (x *Address) GetProtocol() Protocol {
 	return Protocol_PROTOCOL_UNSPECIFIED
 }
 
-func (x *Address) GetRelayAddress() *Address {
+func (x *Address) GetAddress() []byte {
 	if x != nil {
-		return x.RelayAddress
+		return x.Address
 	}
 	return nil
 }
 
-type AddressSet struct {
+func (x *Address) GetLocal() *Address {
+	if x != nil {
+		return x.Local
+	}
+	return nil
+}
+
+func (x *Address) GetIdentifier() []byte {
+	if x != nil {
+		return x.Identifier
+	}
+	return nil
+}
+
+func (x *Address) GetAssociatedData() []byte {
+	if x != nil {
+		return x.AssociatedData
+	}
+	return nil
+}
+
+type AddressList struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Addresses       []*Address             `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	ClientProtocols []Protocol             `protobuf:"varint,2,rep,packed,name=client_protocols,json=clientProtocols,proto3,enum=maddr.Protocol" json:"client_protocols,omitempty"`
@@ -159,20 +202,20 @@ type AddressSet struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *AddressSet) Reset() {
-	*x = AddressSet{}
+func (x *AddressList) Reset() {
+	*x = AddressList{}
 	mi := &file_proto_maddr_v1alpha1_maddr_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AddressSet) String() string {
+func (x *AddressList) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddressSet) ProtoMessage() {}
+func (*AddressList) ProtoMessage() {}
 
-func (x *AddressSet) ProtoReflect() protoreflect.Message {
+func (x *AddressList) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_maddr_v1alpha1_maddr_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -184,19 +227,19 @@ func (x *AddressSet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddressSet.ProtoReflect.Descriptor instead.
-func (*AddressSet) Descriptor() ([]byte, []int) {
+// Deprecated: Use AddressList.ProtoReflect.Descriptor instead.
+func (*AddressList) Descriptor() ([]byte, []int) {
 	return file_proto_maddr_v1alpha1_maddr_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AddressSet) GetAddresses() []*Address {
+func (x *AddressList) GetAddresses() []*Address {
 	if x != nil {
 		return x.Addresses
 	}
 	return nil
 }
 
-func (x *AddressSet) GetClientProtocols() []Protocol {
+func (x *AddressList) GetClientProtocols() []Protocol {
 	if x != nil {
 		return x.ClientProtocols
 	}
@@ -207,28 +250,42 @@ var File_proto_maddr_v1alpha1_maddr_proto protoreflect.FileDescriptor
 
 const file_proto_maddr_v1alpha1_maddr_proto_rawDesc = "" +
 	"\n" +
-	" proto/maddr/v1alpha1/maddr.proto\x12\x05maddr\"\xa1\x01\n" +
-	"\aAddress\x12\x1d\n" +
+	" proto/maddr/v1alpha1/maddr.proto\x12\x05maddr\"\xfb\x01\n" +
+	"\aAddress\x12+\n" +
+	"\bprotocol\x18\x01 \x01(\x0e2\x0f.maddr.ProtocolR\bprotocol\x12\x18\n" +
+	"\aaddress\x18\x02 \x01(\fR\aaddress\x12)\n" +
+	"\x05local\x18\x03 \x01(\v2\x0e.maddr.AddressH\x00R\x05local\x88\x01\x01\x12#\n" +
 	"\n" +
-	"network_id\x18\x01 \x01(\x04R\tnetworkId\x12+\n" +
-	"\bprotocol\x18\x02 \x01(\x0e2\x0f.maddr.ProtocolR\bprotocol\x128\n" +
-	"\rrelay_address\x18\x03 \x01(\v2\x0e.maddr.AddressH\x00R\frelayAddress\x88\x01\x01B\x10\n" +
-	"\x0e_relay_address\"v\n" +
-	"\n" +
-	"AddressSet\x12,\n" +
+	"identifier\x18\x04 \x01(\fH\x01R\n" +
+	"identifier\x88\x01\x01\x12,\n" +
+	"\x0fassociated_data\x18\x05 \x01(\fH\x02R\x0eassociatedData\x88\x01\x01B\b\n" +
+	"\x06_localB\r\n" +
+	"\v_identifierB\x12\n" +
+	"\x10_associated_data\"w\n" +
+	"\vAddressList\x12,\n" +
 	"\taddresses\x18\x01 \x03(\v2\x0e.maddr.AddressR\taddresses\x12:\n" +
-	"\x10client_protocols\x18\x02 \x03(\x0e2\x0f.maddr.ProtocolR\x0fclientProtocols*\xd2\x01\n" +
+	"\x10client_protocols\x18\x02 \x03(\x0e2\x0f.maddr.ProtocolR\x0fclientProtocols*\x89\x03\n" +
 	"\bProtocol\x12\x18\n" +
 	"\x14PROTOCOL_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fPROTOCOL_IP4\x10\x01\x12\x10\n" +
-	"\fPROTOCOL_IP6\x10\x02\x12\x10\n" +
-	"\fPROTOCOL_TCP\x10\x03\x12\x10\n" +
-	"\fPROTOCOL_UDP\x10\x04\x12\x1a\n" +
-	"\x16PROTOCOL_WEBRTC_SIGNAL\x10\x05\x12\x11\n" +
-	"\rPROTOCOL_HTTP\x10\x06\x12\x12\n" +
-	"\x0ePROTOCOL_HTTPS\x10\a\x12\x0f\n" +
-	"\vPROTOCOL_WS\x10\b\x12\x10\n" +
-	"\fPROTOCOL_WSS\x10\tB{\n" +
+	"\fPROTOCOL_IP6\x10\x02\x12\x11\n" +
+	"\rPROTOCOL_DNS4\x10\x03\x12\x11\n" +
+	"\rPROTOCOL_DNS6\x10\x04\x12\x10\n" +
+	"\fPROTOCOL_TCP\x10\x05\x12\x10\n" +
+	"\fPROTOCOL_UDP\x10\x06\x12\x11\n" +
+	"\rPROTOCOL_QUIC\x10\a\x12\x11\n" +
+	"\rPROTOCOL_HTTP\x10\b\x12\x11\n" +
+	"\rPROTOCOL_GRPC\x10\t\x12\x13\n" +
+	"\x0fPROTOCOL_WEBRTC\x10\n" +
+	"\x12\x16\n" +
+	"\x12PROTOCOL_WEBSOCKET\x10\v\x12\x19\n" +
+	"\x15PROTOCOL_WEBTRANSPORT\x10\f\x12\x10\n" +
+	"\fPROTOCOL_BLE\x10\x14\x12\x10\n" +
+	"\fPROTOCOL_UWB\x10\x15\x12\x11\n" +
+	"\rPROTOCOL_LORA\x10\x16\x12\x12\n" +
+	"\x0ePROTOCOL_ZWAVE\x10\x17\x12\x13\n" +
+	"\x0fPROTOCOL_ZIGBEE\x10\x18\x12\x14\n" +
+	"\x10PROTOCOL_SNRELAY\x10\x1eB{\n" +
 	"\tcom.maddrB\n" +
 	"MaddrProtoP\x01Z.gosuda.org/supernet/proto/maddr/v1alpha1;maddr\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
 
@@ -247,15 +304,15 @@ func file_proto_maddr_v1alpha1_maddr_proto_rawDescGZIP() []byte {
 var file_proto_maddr_v1alpha1_maddr_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_proto_maddr_v1alpha1_maddr_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_maddr_v1alpha1_maddr_proto_goTypes = []any{
-	(Protocol)(0),      // 0: maddr.Protocol
-	(*Address)(nil),    // 1: maddr.Address
-	(*AddressSet)(nil), // 2: maddr.AddressSet
+	(Protocol)(0),       // 0: maddr.Protocol
+	(*Address)(nil),     // 1: maddr.Address
+	(*AddressList)(nil), // 2: maddr.AddressList
 }
 var file_proto_maddr_v1alpha1_maddr_proto_depIdxs = []int32{
 	0, // 0: maddr.Address.protocol:type_name -> maddr.Protocol
-	1, // 1: maddr.Address.relay_address:type_name -> maddr.Address
-	1, // 2: maddr.AddressSet.addresses:type_name -> maddr.Address
-	0, // 3: maddr.AddressSet.client_protocols:type_name -> maddr.Protocol
+	1, // 1: maddr.Address.local:type_name -> maddr.Address
+	1, // 2: maddr.AddressList.addresses:type_name -> maddr.Address
+	0, // 3: maddr.AddressList.client_protocols:type_name -> maddr.Protocol
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name

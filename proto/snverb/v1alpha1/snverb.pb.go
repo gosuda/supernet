@@ -427,7 +427,7 @@ func (x *Identity) GetPublicKeys() []*PublicKey {
 
 type NodeMetadata struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Address       *v1alpha1.AddressSet   `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`   // Node address
+	Address       *v1alpha1.AddressList  `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`   // Node address
 	Identity      *Identity              `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"` // Node identity
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -463,7 +463,7 @@ func (*NodeMetadata) Descriptor() ([]byte, []int) {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *NodeMetadata) GetAddress() *v1alpha1.AddressSet {
+func (x *NodeMetadata) GetAddress() *v1alpha1.AddressList {
 	if x != nil {
 		return x.Address
 	}
@@ -500,9 +500,9 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\tsignature\x18\x02 \x01(\fR\tsignature\">\n" +
 	"\bIdentity\x122\n" +
 	"\vpublic_keys\x18\x01 \x03(\v2\x11.snverb.PublicKeyR\n" +
-	"publicKeys\"i\n" +
-	"\fNodeMetadata\x12+\n" +
-	"\aaddress\x18\x01 \x01(\v2\x11.maddr.AddressSetR\aaddress\x12,\n" +
+	"publicKeys\"j\n" +
+	"\fNodeMetadata\x12,\n" +
+	"\aaddress\x18\x01 \x01(\v2\x12.maddr.AddressListR\aaddress\x12,\n" +
 	"\bidentity\x18\x02 \x01(\v2\x10.snverb.IdentityR\bidentity*\x8b\x01\n" +
 	"\tAlgorithm\x12\v\n" +
 	"\aED25519\x10\x00\x12\t\n" +
@@ -538,15 +538,15 @@ func file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP() []byte {
 var file_proto_snverb_v1alpha1_snverb_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
-	(Algorithm)(0),              // 0: snverb.Algorithm
-	(MultiSignaturePolicy)(0),   // 1: snverb.MultiSignaturePolicy
-	(*SignaturePolicy)(nil),     // 2: snverb.SignaturePolicy
-	(*SignaturePayload)(nil),    // 3: snverb.SignaturePayload
-	(*PublicKey)(nil),           // 4: snverb.PublicKey
-	(*Signature)(nil),           // 5: snverb.Signature
-	(*Identity)(nil),            // 6: snverb.Identity
-	(*NodeMetadata)(nil),        // 7: snverb.NodeMetadata
-	(*v1alpha1.AddressSet)(nil), // 8: maddr.AddressSet
+	(Algorithm)(0),               // 0: snverb.Algorithm
+	(MultiSignaturePolicy)(0),    // 1: snverb.MultiSignaturePolicy
+	(*SignaturePolicy)(nil),      // 2: snverb.SignaturePolicy
+	(*SignaturePayload)(nil),     // 3: snverb.SignaturePayload
+	(*PublicKey)(nil),            // 4: snverb.PublicKey
+	(*Signature)(nil),            // 5: snverb.Signature
+	(*Identity)(nil),             // 6: snverb.Identity
+	(*NodeMetadata)(nil),         // 7: snverb.NodeMetadata
+	(*v1alpha1.AddressList)(nil), // 8: maddr.AddressList
 }
 var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
 	1, // 0: snverb.SignaturePolicy.multi_signature:type_name -> snverb.MultiSignaturePolicy
@@ -554,7 +554,7 @@ var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
 	0, // 2: snverb.PublicKey.algorithm:type_name -> snverb.Algorithm
 	0, // 3: snverb.Signature.algorithm:type_name -> snverb.Algorithm
 	4, // 4: snverb.Identity.public_keys:type_name -> snverb.PublicKey
-	8, // 5: snverb.NodeMetadata.address:type_name -> maddr.AddressSet
+	8, // 5: snverb.NodeMetadata.address:type_name -> maddr.AddressList
 	6, // 6: snverb.NodeMetadata.identity:type_name -> snverb.Identity
 	7, // [7:7] is the sub-list for method output_type
 	7, // [7:7] is the sub-list for method input_type

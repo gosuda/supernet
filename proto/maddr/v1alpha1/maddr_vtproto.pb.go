@@ -24,9 +24,23 @@ func (m *Address) CloneVT() *Address {
 		return (*Address)(nil)
 	}
 	r := new(Address)
-	r.NetworkId = m.NetworkId
 	r.Protocol = m.Protocol
-	r.RelayAddress = m.RelayAddress.CloneVT()
+	r.Local = m.Local.CloneVT()
+	if rhs := m.Address; rhs != nil {
+		tmpBytes := make([]byte, len(rhs))
+		copy(tmpBytes, rhs)
+		r.Address = tmpBytes
+	}
+	if rhs := m.Identifier; rhs != nil {
+		tmpBytes := make([]byte, len(rhs))
+		copy(tmpBytes, rhs)
+		r.Identifier = tmpBytes
+	}
+	if rhs := m.AssociatedData; rhs != nil {
+		tmpBytes := make([]byte, len(rhs))
+		copy(tmpBytes, rhs)
+		r.AssociatedData = tmpBytes
+	}
 	if len(m.unknownFields) > 0 {
 		r.unknownFields = make([]byte, len(m.unknownFields))
 		copy(r.unknownFields, m.unknownFields)
@@ -38,11 +52,11 @@ func (m *Address) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
-func (m *AddressSet) CloneVT() *AddressSet {
+func (m *AddressList) CloneVT() *AddressList {
 	if m == nil {
-		return (*AddressSet)(nil)
+		return (*AddressList)(nil)
 	}
-	r := new(AddressSet)
+	r := new(AddressList)
 	if rhs := m.Addresses; rhs != nil {
 		tmpContainer := make([]*Address, len(rhs))
 		for k, v := range rhs {
@@ -62,7 +76,7 @@ func (m *AddressSet) CloneVT() *AddressSet {
 	return r
 }
 
-func (m *AddressSet) CloneMessageVT() proto.Message {
+func (m *AddressList) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
@@ -72,13 +86,19 @@ func (this *Address) EqualVT(that *Address) bool {
 	} else if this == nil || that == nil {
 		return false
 	}
-	if this.NetworkId != that.NetworkId {
-		return false
-	}
 	if this.Protocol != that.Protocol {
 		return false
 	}
-	if !this.RelayAddress.EqualVT(that.RelayAddress) {
+	if string(this.Address) != string(that.Address) {
+		return false
+	}
+	if !this.Local.EqualVT(that.Local) {
+		return false
+	}
+	if p, q := this.Identifier, that.Identifier; (p == nil && q != nil) || (p != nil && q == nil) || string(p) != string(q) {
+		return false
+	}
+	if p, q := this.AssociatedData, that.AssociatedData; (p == nil && q != nil) || (p != nil && q == nil) || string(p) != string(q) {
 		return false
 	}
 	return string(this.unknownFields) == string(that.unknownFields)
@@ -91,7 +111,7 @@ func (this *Address) EqualMessageVT(thatMsg proto.Message) bool {
 	}
 	return this.EqualVT(that)
 }
-func (this *AddressSet) EqualVT(that *AddressSet) bool {
+func (this *AddressList) EqualVT(that *AddressList) bool {
 	if this == that {
 		return true
 	} else if this == nil || that == nil {
@@ -126,8 +146,8 @@ func (this *AddressSet) EqualVT(that *AddressSet) bool {
 	return string(this.unknownFields) == string(that.unknownFields)
 }
 
-func (this *AddressSet) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*AddressSet)
+func (this *AddressList) EqualMessageVT(thatMsg proto.Message) bool {
+	that, ok := thatMsg.(*AddressList)
 	if !ok {
 		return false
 	}
@@ -163,8 +183,22 @@ func (m *Address) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.RelayAddress != nil {
-		size, err := m.RelayAddress.MarshalToSizedBufferVT(dAtA[:i])
+	if m.AssociatedData != nil {
+		i -= len(m.AssociatedData)
+		copy(dAtA[i:], m.AssociatedData)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.AssociatedData)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Identifier != nil {
+		i -= len(m.Identifier)
+		copy(dAtA[i:], m.Identifier)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.Identifier)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Local != nil {
+		size, err := m.Local.MarshalToSizedBufferVT(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -173,20 +207,22 @@ func (m *Address) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.Protocol != 0 {
 		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.Protocol))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.NetworkId != 0 {
-		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.NetworkId))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *AddressSet) MarshalVT() (dAtA []byte, err error) {
+func (m *AddressList) MarshalVT() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -199,12 +235,12 @@ func (m *AddressSet) MarshalVT() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddressSet) MarshalToVT(dAtA []byte) (int, error) {
+func (m *AddressList) MarshalToVT(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
-func (m *AddressSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *AddressList) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -282,8 +318,22 @@ func (m *Address) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.RelayAddress != nil {
-		size, err := m.RelayAddress.MarshalToSizedBufferVTStrict(dAtA[:i])
+	if m.AssociatedData != nil {
+		i -= len(m.AssociatedData)
+		copy(dAtA[i:], m.AssociatedData)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.AssociatedData)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Identifier != nil {
+		i -= len(m.Identifier)
+		copy(dAtA[i:], m.Identifier)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.Identifier)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Local != nil {
+		size, err := m.Local.MarshalToSizedBufferVTStrict(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -292,20 +342,22 @@ func (m *Address) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.Protocol != 0 {
 		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.Protocol))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.NetworkId != 0 {
-		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.NetworkId))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *AddressSet) MarshalVTStrict() (dAtA []byte, err error) {
+func (m *AddressList) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -318,12 +370,12 @@ func (m *AddressSet) MarshalVTStrict() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddressSet) MarshalToVTStrict(dAtA []byte) (int, error) {
+func (m *AddressList) MarshalToVTStrict(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
 }
 
-func (m *AddressSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+func (m *AddressList) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -377,21 +429,30 @@ func (m *Address) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.NetworkId != 0 {
-		n += 1 + protohelpers.SizeOfVarint(uint64(m.NetworkId))
-	}
 	if m.Protocol != 0 {
 		n += 1 + protohelpers.SizeOfVarint(uint64(m.Protocol))
 	}
-	if m.RelayAddress != nil {
-		l = m.RelayAddress.SizeVT()
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.Local != nil {
+		l = m.Local.SizeVT()
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.Identifier != nil {
+		l = len(m.Identifier)
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.AssociatedData != nil {
+		l = len(m.AssociatedData)
 		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
 	}
 	n += len(m.unknownFields)
 	return n
 }
 
-func (m *AddressSet) SizeVT() (n int) {
+func (m *AddressList) SizeVT() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -445,25 +506,6 @@ func (m *Address) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkId", wireType)
-			}
-			m.NetworkId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.NetworkId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
 			}
 			m.Protocol = 0
@@ -481,9 +523,43 @@ func (m *Address) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = append(m.Address[:0], dAtA[iNdEx:postIndex]...)
+			if m.Address == nil {
+				m.Address = []byte{}
+			}
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RelayAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Local", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -510,11 +586,79 @@ func (m *Address) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.RelayAddress == nil {
-				m.RelayAddress = &Address{}
+			if m.Local == nil {
+				m.Local = &Address{}
 			}
-			if err := m.RelayAddress.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Local.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identifier", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Identifier = append(m.Identifier[:0], dAtA[iNdEx:postIndex]...)
+			if m.Identifier == nil {
+				m.Identifier = []byte{}
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssociatedData", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssociatedData = append(m.AssociatedData[:0], dAtA[iNdEx:postIndex]...)
+			if m.AssociatedData == nil {
+				m.AssociatedData = []byte{}
 			}
 			iNdEx = postIndex
 		default:
@@ -539,7 +683,7 @@ func (m *Address) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddressSet) UnmarshalVT(dAtA []byte) error {
+func (m *AddressList) UnmarshalVT(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -562,10 +706,10 @@ func (m *AddressSet) UnmarshalVT(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddressSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: AddressList: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddressSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AddressList: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -724,25 +868,6 @@ func (m *Address) UnmarshalVTUnsafe(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkId", wireType)
-			}
-			m.NetworkId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.NetworkId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
 			}
 			m.Protocol = 0
@@ -760,9 +885,40 @@ func (m *Address) UnmarshalVTUnsafe(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = dAtA[iNdEx:postIndex]
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RelayAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Local", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -789,12 +945,74 @@ func (m *Address) UnmarshalVTUnsafe(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.RelayAddress == nil {
-				m.RelayAddress = &Address{}
+			if m.Local == nil {
+				m.Local = &Address{}
 			}
-			if err := m.RelayAddress.UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Local.UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identifier", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Identifier = dAtA[iNdEx:postIndex]
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AssociatedData", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AssociatedData = dAtA[iNdEx:postIndex]
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -818,7 +1036,7 @@ func (m *Address) UnmarshalVTUnsafe(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddressSet) UnmarshalVTUnsafe(dAtA []byte) error {
+func (m *AddressList) UnmarshalVTUnsafe(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -841,10 +1059,10 @@ func (m *AddressSet) UnmarshalVTUnsafe(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddressSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: AddressList: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddressSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AddressList: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
