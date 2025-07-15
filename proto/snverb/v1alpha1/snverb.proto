@@ -6,57 +6,158 @@ import "proto/maddr/v1alpha1/maddr.proto";
 
 option go_package = "gosuda.org/supernet/proto/snverb/v1alpha1;snverb";
 
+// Algorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
 enum Algorithm {
+  // ED25519 is the Ed25519 digital signature algorithm.
   ED25519 = 0;
+  // ED448 is the Ed448 digital signature algorithm.
   ED448 = 1;
 
+  // MLDSA44 is the ML-DSA-44 digital signature algorithm (NIST PQC).
   MLDSA44 = 2;
+  // MLDSA65 is the ML-DSA-65 digital signature algorithm (NIST PQC).
   MLDSA65 = 3;
+  // MLDSA87 is the ML-DSA-87 digital signature algorithm (NIST PQC).
   MLDSA87 = 4;
 
+  // X25519 is the X25519 elliptic curve Diffie-Hellman key exchange.
   X25519 = 5;
+  // X448 is the X448 elliptic curve Diffie-Hellman key exchange.
   X448 = 6;
 
+  // MLKEM512 is the ML-KEM-512 key encapsulation mechanism (NIST PQC).
   MLKEM512 = 7;
+  // MLKEM768 is the ML-KEM-768 key encapsulation mechanism (NIST PQC).
   MLKEM768 = 8;
+  // MLKEM1024 is the ML-KEM-1024 key encapsulation mechanism (NIST PQC).
   MLKEM1024 = 9;
+
+  // AES128_GCM is the Advanced Encryption Standard with 128-bit key in Galois/Counter Mode.
+  AES128_GCM = 10;
+  // AES256_GCM is the Advanced Encryption Standard with 256-bit key in Galois/Counter Mode.
+  AES256_GCM = 11;
+  // CHACHA20_POLY1305 is the ChaCha20-Poly1305 authenticated encryption algorithm.
+  CHACHA20_POLY1305 = 12;
+  // XCHACHA20_POLY1305 is the XChaCha20-Poly1305 authenticated encryption algorithm.
+  XCHACHA20_POLY1305 = 13;
+
+  // SHA256 is the SHA-256 digest algorithm.
+  SHA256 = 14;
+  // SHA384 is the SHA-384 digest algorithm.
+  SHA384 = 15;
+  // SHA512 is the SHA-512 digest algorithm.
+  SHA512 = 16; // Corrected duplicate value
+  // SHA3_256 is the SHA3-256 digest algorithm.
+  SHA3_256 = 17;
+  // SHA3_384 is the SHA3-384 digest algorithm.
+  SHA3_384 = 18;
+  // SHA3_512 is the SHA3-512 digest algorithm.
+  SHA3_512 = 19;
+  // BLAKE2B is the BLAKE2b digest algorithm.
+  BLAKE2B = 20;
+  // BLAKE3 is the BLAKE3 digest algorithm.
+  BLAKE3 = 21;
 }
 
+// MultiSignaturePolicy defines the policy for validating multiple signatures.
 enum MultiSignaturePolicy {
-  REQUIRE_ALL = 0; // All signatures are required
-  REQUIRE_ANY = 1; // Any signature is sufficient
-  REQUIRE_QUORUM = 2; // A quorum of signatures is required
+  // REQUIRE_ALL means all provided signatures must be valid.
+  REQUIRE_ALL = 0;
+  // REQUIRE_ANY means at least one valid signature is sufficient.
+  REQUIRE_ANY = 1;
+  // REQUIRE_QUORUM means a specified threshold of valid signatures is required.
+  REQUIRE_QUORUM = 2;
 }
 
+// SignaturePolicy defines the rules and requirements for a set of signatures.
 message SignaturePolicy {
-  int64 total_signers = 1; // Total number of available signers
-  int64 total_signatures = 2; // Total number of signatures
-  int64 threshold = 3; // Minimum number of vaild signatures required
-  MultiSignaturePolicy multi_signature = 4; // Type of multi-signature policy
+  // total_signers is the total number of available signers for this policy.
+  int64 total_signers = 1;
+  // total_signatures is the total number of signatures collected.
+  int64 total_signatures = 2;
+  // threshold is the minimum number of valid signatures required to satisfy the policy.
+  int64 threshold = 3;
+  // timestamp is the Unix timestamp (in seconds) when this policy was created.
+  int64 timestamp = 4;
+  // expiration is the Unix timestamp (in seconds) when this policy expires.
+  int64 expiration = 5;
+  // nonce is a random value used to prevent replay attacks for this policy.
+  bytes nonce = 6;
+  // multi_signature specifies the type of multi-signature policy applied.
+  MultiSignaturePolicy multi_signature = 7;
 }
 
-message SignaturePayload {
-  int64 timestamp = 1; // Unix timestamp in seconds
-  int64 nonce = 2; // Unique nonce for the signature
-  SignaturePolicy policy = 3; // Signature policy
-  bytes data = 4; // Data to be signed
-}
-
-message PublicKey {
+// Signature represents a digital signature.
+message Signature {
+  // algorithm specifies the cryptographic algorithm used to generate this signature.
   Algorithm algorithm = 1;
+  // digest_algorithm specifies the hashing algorithm used to digest the signed content before signing.
+  Algorithm digest_algorithm = 2;
+  // signature is the raw bytes of the digital signature.
+  bytes signature = 3;
+}
+
+// MultiSignature contains a serialized SignaturePolicy and a collection of individual signatures.
+message MultiSignature {
+  // policy is the serialized SignaturePolicy that governs these signatures.
+  bytes policy = 1;
+  // signatures is a list of individual digital signatures.
+  repeated Signature signatures = 2;
+}
+
+// PublicKey represents a cryptographic public key.
+message PublicKey {
+  // algorithm specifies the cryptographic algorithm associated with this public key.
+  Algorithm algorithm = 1;
+  // key is the raw bytes of the public key.
   bytes key = 2;
 }
 
-message Signature {
+// PrivateKey represents a cryptographic private key.
+message PrivateKey {
+  // algorithm specifies the cryptographic algorithm associated with this private key.
   Algorithm algorithm = 1;
-  bytes signature = 2;
+  // key is the raw bytes of the private key.
+  bytes key = 2;
+  // public_key is the corresponding public key derived from this private key.
+  PublicKey public_key = 3;
 }
 
+// Identity represents a collection of public keys that define an entity's identity.
 message Identity {
-  repeated PublicKey public_keys = 1; // List of public keys
+  // public_keys is a list of public keys associated with this identity.
+  repeated PublicKey public_keys = 1;
 }
 
+// NodeMetadata contains essential information about a Supernet node.
 message NodeMetadata {
-  maddr.AddressList address = 1; // Node address
-  Identity identity = 2; // Node identity
+  // address is the multiaddress list of the node.
+  maddr.AddressList address = 1;
+  // identity is the cryptographic identity of the node.
+  Identity identity = 2;
+}
+
+// EncryptedData represents data that has been encrypted.
+message EncryptedData {
+  // data contains the encrypted ciphertext, potentially including authentication tags.
+  bytes data = 1;
+  // nonce is the cryptographic nonce (number used once) used during encryption.
+  bytes nonce = 2;
+  // algorithm specifies the encryption algorithm used.
+  Algorithm algorithm = 3;
+}
+
+// Lease defines an authorized path or relay for a destination.
+message Lease {
+  bytes relay_node_id = 1; // Hash of the RouterIdentity of the relay node
+  uint32 path_id = 2; // Identifier for the specific path/tunnel
+  int64 expiration_timestamp = 3; // Unix timestamp in seconds when the lease expires
+}
+
+// LeaseSet contains a collection of Leases for a Supernet endpoint.
+message LeaseSet {
+  Identity endpoint_identity = 1; // The identity of the endpoint
+  PublicKey encryption_public_key = 2; // Public key for encrypting messages to the endpoint
+  PublicKey signing_public_key = 3; // Public key for signing this LeaseSet (e.g., for revocation)
+  repeated Lease leases = 4; // List of active leases for the endpoint
 }
