@@ -15,24 +15,40 @@ package maddr;
 
 enum Protocol {
   PROTOCOL_UNSPECIFIED = 0;
-  PROTOCOL_IP4 = 1;
-  PROTOCOL_IP6 = 2;
-  PROTOCOL_TCP = 3;
-  PROTOCOL_UDP = 4;
-  PROTOCOL_WEBRTC_SIGNAL = 5;
-  PROTOCOL_HTTP = 6;
-  PROTOCOL_HTTPS = 7;
-  PROTOCOL_WS = 8;
-  PROTOCOL_WSS = 9;
+
+  PROTOCOL_IP4 = 1; // IPv4 address, e.g., "1.1.1.1"
+  PROTOCOL_IP6 = 2; // IPv6 address, e.g., "2606:4700:4700::1111"
+  PROTOCOL_DNS4 = 3; // DNS address, e.g., "example.com"
+  PROTOCOL_DNS6 = 4; // DNS address with IPv6, e.g., "example.com"
+
+  PROTOCOL_TCP = 5; // TCP protocol and port, e.g., "7496"
+  PROTOCOL_UDP = 6; // UDP protocol and port, e.g., "7496"
+  PROTOCOL_QUIC = 7; // QUIC protocol and port, e.g., "7496" with optional associated Certificate Fingerprint
+
+  PROTOCOL_HTTP = 8; // HTTP protocol, with streaming support
+  PROTOCOL_GRPC = 9; // gRPC protocol, with streaming support
+  PROTOCOL_WEBRTC = 10; // WebRTC Data Channel Transport
+  PROTOCOL_WEBSOCKET = 11; // WebSocket protocol, with streaming support
+  PROTOCOL_WEBTRANSPORT = 12; // WebTransport protocol, with streaming support
+
+  PROTOCOL_BLE = 20; // Bluetooth Low Energy protocol WIP
+  PROTOCOL_UWB = 21; // Ultra-Wideband protocol WIP
+  PROTOCOL_LORA = 22; // LoRA protocol WIP
+  PROTOCOL_ZWAVE = 23; // Z-Wave protocol WIP
+  PROTOCOL_ZIGBEE = 24; // Zigbee protocol WIP
+
+  PROTOCOL_SNRELAY = 30; // SuperNet Relay Protocol
 }
 
 message Address {
-  uint64 network_id = 1;
-  Protocol protocol = 2;
-  optional Address relay_address = 3;
+  Protocol protocol = 1; // Protocol type of the address
+  bytes address = 2; // address data
+  optional Address local = 3;
+  optional bytes identifier = 4; // Unique identifier for the address
+  optional bytes associated_data = 5; // Additional data associated with the address
 }
 
-message AddressSet {
+message AddressList {
   repeated Address addresses = 1;
   repeated Protocol client_protocols = 2;
 }
@@ -61,18 +77,18 @@ message AddressSet {
 ```go
 // Go construction example
 addr := &maddr.Address{
-  NetworkId: 1234,
   Protocol: maddr.Protocol_PROTOCOL_TCP,
-  RelayAddress: &maddr.Address{
-    Protocol: maddr.Protocol_PROTOCOL_WEBRTC_SIGNAL,
+  Address: []byte("192.0.2.1:443"),
+  Local: &maddr.Address{
+    Protocol: maddr.Protocol_PROTOCOL_WEBRTC,
   },
 }
 
-addrSet := &maddr.AddressSet{
+addrList := &maddr.AddressList{
   Addresses: []*maddr.Address{addr},
   ClientProtocols: []maddr.Protocol{
     maddr.Protocol_PROTOCOL_TCP,
-    maddr.Protocol_PROTOCOL_HTTPS,
+    maddr.Protocol_PROTOCOL_HTTP,
   },
 }
 ```

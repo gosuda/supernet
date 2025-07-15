@@ -8,21 +8,6 @@
 - 다중 경로 장애 조치 지원
 
 ## 2. 패킷 형식
-### 2.1. 프로토콜 버퍼 스키마
-```protobuf
-message RoutingPacket {
-  PacketHeader header = 1;
-  bytes payload = 2;  // ECIES 암호화 데이터
-
-  message PacketHeader {
-    bytes dest_peer = 1;    // 목적지 공개키 해시
-    uint32 ttl = 2;         // 최대 홉 수 (Time-to-live)
-    uint64 flow_id = 3;     // QoS 흐름 식별자
-    bytes signature = 4;    // Ed25519 서명
-    repeated bytes path = 5; // 선택된 노드 경로
-  }
-}
-```
 
 ## 3. 라우팅 알고리즘
 ### 3.1. 핵심 구성 요소
@@ -69,6 +54,15 @@ func 최적경로선택(패킷 *pb.RoutingPacket) *Route {
 
     for _, 경로 := range 가능한경로들 {
         점수 := (1 / 경로.평균레이턴시) * 
+### 4.4. 노드 메타데이터 스키마
+```protobuf
+import "proto/maddr/v1alpha1/maddr.proto";
+
+message NodeMetadata {
+  maddr.AddressList address = 1; // Node address
+  Identity identity = 2; // Node identity
+}
+```
                (1 / 경로.노드부하) * 
                (경로.사용가능대역폭 / 100)
         
@@ -95,3 +89,56 @@ func 최적경로선택(패킷 *pb.RoutingPacket) *Route {
 - 실시간 라우팅 메트릭 대시보드
 - 패킷 손실률 추적 시스템
 - 자동 규모 조정 메커니즘
+
+### 5.2. 서명 및 신원 스키마
+```protobuf
+enum Algorithm {
+  ED25519 = 0;
+  ED448 = 1;
+
+  MLDSA44 = 2;
+  MLDSA65 = 3;
+  MLDSA87 = 4;
+
+  X25519 = 5;
+  X448 = 6;
+
+  MLKEM512 = 7;
+  MLKEM768 = 8;
+  MLKEM1024 = 9;
+}
+
+enum MultiSignaturePolicy {
+  REQUIRE_ALL = 0; // All signatures are required
+  REQUIRE_ANY = 1; // Any signature is sufficient
+  REQUIRE_QUORUM = 2; // A quorum of signatures is required
+}
+
+message SignaturePolicy {
+  int64 total_signers = 1; // Total number of available signers
+  int64 total_signatures = 2; // Total number of signatures
+  int64 threshold = 3; // Minimum number of vaild signatures required
+  MultiSignaturePolicy multi_signature = 4; // Type of multi-signature policy
+}
+
+message SignaturePayload {
+  int64 timestamp = 1; // Unix timestamp in seconds
+  int64 nonce = 2; // Unique nonce for the signature
+  SignaturePolicy policy = 3; // Signature policy
+  bytes data = 4; // Data to be signed
+}
+
+message PublicKey {
+  Algorithm algorithm = 1;
+  bytes key = 2;
+}
+
+message Signature {
+  Algorithm algorithm = 1;
+  bytes signature = 2;
+}
+
+message Identity {
+  repeated PublicKey public_keys = 1; // List of public keys
+}
+```
