@@ -46,7 +46,7 @@ enum Algorithm {
   // SHA384 is the SHA-384 digest algorithm.
   SHA384 = 15;
   // SHA512 is the SHA-512 digest algorithm.
-  SHA512 = 16; // Corrected duplicate value
+  SHA512 = 16;
   // SHA3_256 is the SHA3-256 digest algorithm.
   SHA3_256 = 17;
   // SHA3_384 is the SHA3-384 digest algorithm.

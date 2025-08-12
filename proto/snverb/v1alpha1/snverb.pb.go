@@ -59,7 +59,7 @@ const (
 	// SHA384 is the SHA-384 digest algorithm.
 	Algorithm_SHA384 Algorithm = 15
 	// SHA512 is the SHA-512 digest algorithm.
-	Algorithm_SHA512 Algorithm = 16 // Corrected duplicate value
+	Algorithm_SHA512 Algorithm = 16
 	// SHA3_256 is the SHA3-256 digest algorithm.
 	Algorithm_SHA3_256 Algorithm = 17
 	// SHA3_384 is the SHA3-384 digest algorithm.
