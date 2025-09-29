@@ -550,10 +550,11 @@ func (x *Identity) GetPublicKeys() []*IdentityKey {
 type RouterInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Version       int64                  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`                                                    // Version number of the router information for compatibility checking.
-	Identity      *Identity              `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`                                                   // Identity containing the public keys for this router.
-	AddressList   *v1alpha1.AddressList  `protobuf:"bytes,3,opt,name=address_list,json=addressList,proto3" json:"address_list,omitempty"`                          // List of network addresses where this router can be reached.
-	RouterClass   RouterClass            `protobuf:"varint,4,opt,name=router_class,json=routerClass,proto3,enum=snverb.RouterClass" json:"router_class,omitempty"` // Classification of the router determining its capabilities.
-	Features      []RouterFeature        `protobuf:"varint,5,rep,packed,name=features,proto3,enum=snverb.RouterFeature" json:"features,omitempty"`                 // List of features supported by this router node.
+	Timestamp     int64                  `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                                // Timestamp of the router information.
+	Identity      *Identity              `protobuf:"bytes,3,opt,name=identity,proto3" json:"identity,omitempty"`                                                   // Identity containing the public keys for this router.
+	AddressList   *v1alpha1.AddressList  `protobuf:"bytes,4,opt,name=address_list,json=addressList,proto3" json:"address_list,omitempty"`                          // List of network addresses where this router can be reached.
+	RouterClass   RouterClass            `protobuf:"varint,5,opt,name=router_class,json=routerClass,proto3,enum=snverb.RouterClass" json:"router_class,omitempty"` // Classification of the router determining its capabilities.
+	Features      []RouterFeature        `protobuf:"varint,6,rep,packed,name=features,proto3,enum=snverb.RouterFeature" json:"features,omitempty"`                 // List of features supported by this router node.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -595,6 +596,13 @@ func (x *RouterInfo) GetVersion() int64 {
 	return 0
 }
 
+func (x *RouterInfo) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
 func (x *RouterInfo) GetIdentity() *Identity {
 	if x != nil {
 		return x.Identity
@@ -623,6 +631,171 @@ func (x *RouterInfo) GetFeatures() []RouterFeature {
 	return nil
 }
 
+// SignedRouterInfo is a RouterInfo message signed by the router's identity.
+type SignedRouterInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RouterId      []byte                 `protobuf:"bytes,1,opt,name=router_id,json=routerId,proto3" json:"router_id,omitempty"`
+	RouterInfo    []byte                 `protobuf:"bytes,2,opt,name=router_info,json=routerInfo,proto3" json:"router_info,omitempty"`
+	Signature     *Signature             `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignedRouterInfo) Reset() {
+	*x = SignedRouterInfo{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignedRouterInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignedRouterInfo) ProtoMessage() {}
+
+func (x *SignedRouterInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignedRouterInfo.ProtoReflect.Descriptor instead.
+func (*SignedRouterInfo) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SignedRouterInfo) GetRouterId() []byte {
+	if x != nil {
+		return x.RouterId
+	}
+	return nil
+}
+
+func (x *SignedRouterInfo) GetRouterInfo() []byte {
+	if x != nil {
+		return x.RouterInfo
+	}
+	return nil
+}
+
+func (x *SignedRouterInfo) GetSignature() *Signature {
+	if x != nil {
+		return x.Signature
+	}
+	return nil
+}
+
+type VirtualAddress struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Identity      *Identity              `protobuf:"bytes,1,opt,name=identity,proto3" json:"identity,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VirtualAddress) Reset() {
+	*x = VirtualAddress{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VirtualAddress) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VirtualAddress) ProtoMessage() {}
+
+func (x *VirtualAddress) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VirtualAddress.ProtoReflect.Descriptor instead.
+func (*VirtualAddress) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *VirtualAddress) GetIdentity() *Identity {
+	if x != nil {
+		return x.Identity
+	}
+	return nil
+}
+
+type TunnelDescriptor struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TunnelId      []byte                 `protobuf:"bytes,1,opt,name=tunnel_id,json=tunnelId,proto3" json:"tunnel_id,omitempty"`
+	Destination   []byte                 `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
+	Source        []byte                 `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TunnelDescriptor) Reset() {
+	*x = TunnelDescriptor{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TunnelDescriptor) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TunnelDescriptor) ProtoMessage() {}
+
+func (x *TunnelDescriptor) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TunnelDescriptor.ProtoReflect.Descriptor instead.
+func (*TunnelDescriptor) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *TunnelDescriptor) GetTunnelId() []byte {
+	if x != nil {
+		return x.TunnelId
+	}
+	return nil
+}
+
+func (x *TunnelDescriptor) GetDestination() []byte {
+	if x != nil {
+		return x.Destination
+	}
+	return nil
+}
+
+func (x *TunnelDescriptor) GetSource() []byte {
+	if x != nil {
+		return x.Source
+	}
+	return nil
+}
+
 var File_proto_snverb_v1alpha1_snverb_proto protoreflect.FileDescriptor
 
 const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
@@ -640,14 +813,26 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\tsignature\x18\x04 \x01(\fR\tsignature\"@\n" +
 	"\bIdentity\x124\n" +
 	"\vpublic_keys\x18\x01 \x03(\v2\x13.snverb.IdentityKeyR\n" +
-	"publicKeys\"\xf6\x01\n" +
+	"publicKeys\"\x94\x02\n" +
 	"\n" +
 	"RouterInfo\x12\x18\n" +
-	"\aversion\x18\x01 \x01(\x03R\aversion\x12,\n" +
-	"\bidentity\x18\x02 \x01(\v2\x10.snverb.IdentityR\bidentity\x125\n" +
-	"\faddress_list\x18\x03 \x01(\v2\x12.maddr.AddressListR\vaddressList\x126\n" +
-	"\frouter_class\x18\x04 \x01(\x0e2\x13.snverb.RouterClassR\vrouterClass\x121\n" +
-	"\bfeatures\x18\x05 \x03(\x0e2\x15.snverb.RouterFeatureR\bfeatures*S\n" +
+	"\aversion\x18\x01 \x01(\x03R\aversion\x12\x1c\n" +
+	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\x12,\n" +
+	"\bidentity\x18\x03 \x01(\v2\x10.snverb.IdentityR\bidentity\x125\n" +
+	"\faddress_list\x18\x04 \x01(\v2\x12.maddr.AddressListR\vaddressList\x126\n" +
+	"\frouter_class\x18\x05 \x01(\x0e2\x13.snverb.RouterClassR\vrouterClass\x121\n" +
+	"\bfeatures\x18\x06 \x03(\x0e2\x15.snverb.RouterFeatureR\bfeatures\"\x81\x01\n" +
+	"\x10SignedRouterInfo\x12\x1b\n" +
+	"\trouter_id\x18\x01 \x01(\fR\brouterId\x12\x1f\n" +
+	"\vrouter_info\x18\x02 \x01(\fR\n" +
+	"routerInfo\x12/\n" +
+	"\tsignature\x18\x03 \x01(\v2\x11.snverb.SignatureR\tsignature\">\n" +
+	"\x0eVirtualAddress\x12,\n" +
+	"\bidentity\x18\x01 \x01(\v2\x10.snverb.IdentityR\bidentity\"i\n" +
+	"\x10TunnelDescriptor\x12\x1b\n" +
+	"\ttunnel_id\x18\x01 \x01(\fR\btunnelId\x12 \n" +
+	"\vdestination\x18\x02 \x01(\fR\vdestination\x12\x16\n" +
+	"\x06source\x18\x03 \x01(\fR\x06source*S\n" +
 	"\x12SignatureAlgorithm\x12\v\n" +
 	"\aED25519\x10\x00\x12\t\n" +
 	"\x05ED448\x10\x01\x12\v\n" +
@@ -705,7 +890,7 @@ func file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_snverb_v1alpha1_snverb_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
-var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
 	(SignatureAlgorithm)(0),      // 0: snverb.SignatureAlgorithm
 	(DigestAlgorithm)(0),         // 1: snverb.DigestAlgorithm
@@ -717,7 +902,10 @@ var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
 	(*Signature)(nil),            // 7: snverb.Signature
 	(*Identity)(nil),             // 8: snverb.Identity
 	(*RouterInfo)(nil),           // 9: snverb.RouterInfo
-	(*v1alpha1.AddressList)(nil), // 10: maddr.AddressList
+	(*SignedRouterInfo)(nil),     // 10: snverb.SignedRouterInfo
+	(*VirtualAddress)(nil),       // 11: snverb.VirtualAddress
+	(*TunnelDescriptor)(nil),     // 12: snverb.TunnelDescriptor
+	(*v1alpha1.AddressList)(nil), // 13: maddr.AddressList
 }
 var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
 	0,  // 0: snverb.IdentityKey.algorithm:type_name -> snverb.SignatureAlgorithm
@@ -725,14 +913,16 @@ var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
 	1,  // 2: snverb.Signature.digest_algorithm:type_name -> snverb.DigestAlgorithm
 	6,  // 3: snverb.Identity.public_keys:type_name -> snverb.IdentityKey
 	8,  // 4: snverb.RouterInfo.identity:type_name -> snverb.Identity
-	10, // 5: snverb.RouterInfo.address_list:type_name -> maddr.AddressList
+	13, // 5: snverb.RouterInfo.address_list:type_name -> maddr.AddressList
 	4,  // 6: snverb.RouterInfo.router_class:type_name -> snverb.RouterClass
 	5,  // 7: snverb.RouterInfo.features:type_name -> snverb.RouterFeature
-	8,  // [8:8] is the sub-list for method output_type
-	8,  // [8:8] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	7,  // 8: snverb.SignedRouterInfo.signature:type_name -> snverb.Signature
+	8,  // 9: snverb.VirtualAddress.identity:type_name -> snverb.Identity
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_proto_snverb_v1alpha1_snverb_proto_init() }
@@ -746,7 +936,7 @@ func file_proto_snverb_v1alpha1_snverb_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_snverb_v1alpha1_snverb_proto_rawDesc), len(file_proto_snverb_v1alpha1_snverb_proto_rawDesc)),
 			NumEnums:      6,
-			NumMessages:   4,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
