@@ -22,223 +22,379 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Algorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
-type Algorithm int32
+// SigningAlgorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
+type SignatureAlgorithm int32
 
 const (
 	// ED25519 is the Ed25519 digital signature algorithm.
-	Algorithm_ED25519 Algorithm = 0
+	SignatureAlgorithm_ED25519 SignatureAlgorithm = 0
 	// ED448 is the Ed448 digital signature algorithm.
-	Algorithm_ED448 Algorithm = 1
+	SignatureAlgorithm_ED448 SignatureAlgorithm = 1
 	// MLDSA44 is the ML-DSA-44 digital signature algorithm (NIST PQC).
-	Algorithm_MLDSA44 Algorithm = 2
+	SignatureAlgorithm_MLDSA44 SignatureAlgorithm = 2
 	// MLDSA65 is the ML-DSA-65 digital signature algorithm (NIST PQC).
-	Algorithm_MLDSA65 Algorithm = 3
+	SignatureAlgorithm_MLDSA65 SignatureAlgorithm = 3
 	// MLDSA87 is the ML-DSA-87 digital signature algorithm (NIST PQC).
-	Algorithm_MLDSA87 Algorithm = 4
-	// X25519 is the X25519 elliptic curve Diffie-Hellman key exchange.
-	Algorithm_X25519 Algorithm = 5
-	// X448 is the X448 elliptic curve Diffie-Hellman key exchange.
-	Algorithm_X448 Algorithm = 6
-	// MLKEM512 is the ML-KEM-512 key encapsulation mechanism (NIST PQC).
-	Algorithm_MLKEM512 Algorithm = 7
-	// MLKEM768 is the ML-KEM-768 key encapsulation mechanism (NIST PQC).
-	Algorithm_MLKEM768 Algorithm = 8
-	// MLKEM1024 is the ML-KEM-1024 key encapsulation mechanism (NIST PQC).
-	Algorithm_MLKEM1024 Algorithm = 9
-	// AES128_GCM is the Advanced Encryption Standard with 128-bit key in Galois/Counter Mode.
-	Algorithm_AES128_GCM Algorithm = 10
-	// AES256_GCM is the Advanced Encryption Standard with 256-bit key in Galois/Counter Mode.
-	Algorithm_AES256_GCM Algorithm = 11
-	// CHACHA20_POLY1305 is the ChaCha20-Poly1305 authenticated encryption algorithm.
-	Algorithm_CHACHA20_POLY1305 Algorithm = 12
-	// XCHACHA20_POLY1305 is the XChaCha20-Poly1305 authenticated encryption algorithm.
-	Algorithm_XCHACHA20_POLY1305 Algorithm = 13
-	// SHA256 is the SHA-256 digest algorithm.
-	Algorithm_SHA256 Algorithm = 14
-	// SHA384 is the SHA-384 digest algorithm.
-	Algorithm_SHA384 Algorithm = 15
-	// SHA512 is the SHA-512 digest algorithm.
-	Algorithm_SHA512 Algorithm = 16
-	// SHA3_256 is the SHA3-256 digest algorithm.
-	Algorithm_SHA3_256 Algorithm = 17
-	// SHA3_384 is the SHA3-384 digest algorithm.
-	Algorithm_SHA3_384 Algorithm = 18
-	// SHA3_512 is the SHA3-512 digest algorithm.
-	Algorithm_SHA3_512 Algorithm = 19
-	// BLAKE2B is the BLAKE2b digest algorithm.
-	Algorithm_BLAKE2B Algorithm = 20
-	// BLAKE3 is the BLAKE3 digest algorithm.
-	Algorithm_BLAKE3 Algorithm = 21
+	SignatureAlgorithm_MLDSA87 SignatureAlgorithm = 4
 )
 
-// Enum value maps for Algorithm.
+// Enum value maps for SignatureAlgorithm.
 var (
-	Algorithm_name = map[int32]string{
-		0:  "ED25519",
-		1:  "ED448",
-		2:  "MLDSA44",
-		3:  "MLDSA65",
-		4:  "MLDSA87",
-		5:  "X25519",
-		6:  "X448",
-		7:  "MLKEM512",
-		8:  "MLKEM768",
-		9:  "MLKEM1024",
-		10: "AES128_GCM",
-		11: "AES256_GCM",
-		12: "CHACHA20_POLY1305",
-		13: "XCHACHA20_POLY1305",
-		14: "SHA256",
-		15: "SHA384",
-		16: "SHA512",
-		17: "SHA3_256",
-		18: "SHA3_384",
-		19: "SHA3_512",
-		20: "BLAKE2B",
-		21: "BLAKE3",
+	SignatureAlgorithm_name = map[int32]string{
+		0: "ED25519",
+		1: "ED448",
+		2: "MLDSA44",
+		3: "MLDSA65",
+		4: "MLDSA87",
 	}
-	Algorithm_value = map[string]int32{
-		"ED25519":            0,
-		"ED448":              1,
-		"MLDSA44":            2,
-		"MLDSA65":            3,
-		"MLDSA87":            4,
-		"X25519":             5,
-		"X448":               6,
-		"MLKEM512":           7,
-		"MLKEM768":           8,
-		"MLKEM1024":          9,
-		"AES128_GCM":         10,
-		"AES256_GCM":         11,
-		"CHACHA20_POLY1305":  12,
-		"XCHACHA20_POLY1305": 13,
-		"SHA256":             14,
-		"SHA384":             15,
-		"SHA512":             16,
-		"SHA3_256":           17,
-		"SHA3_384":           18,
-		"SHA3_512":           19,
-		"BLAKE2B":            20,
-		"BLAKE3":             21,
+	SignatureAlgorithm_value = map[string]int32{
+		"ED25519": 0,
+		"ED448":   1,
+		"MLDSA44": 2,
+		"MLDSA65": 3,
+		"MLDSA87": 4,
 	}
 )
 
-func (x Algorithm) Enum() *Algorithm {
-	p := new(Algorithm)
+func (x SignatureAlgorithm) Enum() *SignatureAlgorithm {
+	p := new(SignatureAlgorithm)
 	*p = x
 	return p
 }
 
-func (x Algorithm) String() string {
+func (x SignatureAlgorithm) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (Algorithm) Descriptor() protoreflect.EnumDescriptor {
+func (SignatureAlgorithm) Descriptor() protoreflect.EnumDescriptor {
 	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[0].Descriptor()
 }
 
-func (Algorithm) Type() protoreflect.EnumType {
+func (SignatureAlgorithm) Type() protoreflect.EnumType {
 	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[0]
 }
 
-func (x Algorithm) Number() protoreflect.EnumNumber {
+func (x SignatureAlgorithm) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use Algorithm.Descriptor instead.
-func (Algorithm) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use SignatureAlgorithm.Descriptor instead.
+func (SignatureAlgorithm) EnumDescriptor() ([]byte, []int) {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{0}
 }
 
-// MultiSignaturePolicy defines the policy for validating multiple signatures.
-type MultiSignaturePolicy int32
+type DigestAlgorithm int32
 
 const (
-	// REQUIRE_ALL means all provided signatures must be valid.
-	MultiSignaturePolicy_REQUIRE_ALL MultiSignaturePolicy = 0
-	// REQUIRE_ANY means at least one valid signature is sufficient.
-	MultiSignaturePolicy_REQUIRE_ANY MultiSignaturePolicy = 1
-	// REQUIRE_QUORUM means a specified threshold of valid signatures is required.
-	MultiSignaturePolicy_REQUIRE_QUORUM MultiSignaturePolicy = 2
+	// SHA256 is the SHA-256 digest algorithm.
+	DigestAlgorithm_SHA256 DigestAlgorithm = 0
+	// SHA384 is the SHA-384 digest algorithm.
+	DigestAlgorithm_SHA384 DigestAlgorithm = 1
+	// SHA512 is the SHA-512 digest algorithm.
+	DigestAlgorithm_SHA512 DigestAlgorithm = 2
+	// SHA3_256 is the SHA3-256 digest algorithm.
+	DigestAlgorithm_SHA3_256 DigestAlgorithm = 3
+	// SHA3_384 is the SHA3-384 digest algorithm.
+	DigestAlgorithm_SHA3_384 DigestAlgorithm = 4
+	// SHA3_512 is the SHA3-512 digest algorithm.
+	DigestAlgorithm_SHA3_512 DigestAlgorithm = 5
+	// BLAKE2B is the BLAKE2b digest algorithm.
+	DigestAlgorithm_BLAKE2B DigestAlgorithm = 6
+	// BLAKE3 is the BLAKE3 digest algorithm.
+	DigestAlgorithm_BLAKE3 DigestAlgorithm = 7
 )
 
-// Enum value maps for MultiSignaturePolicy.
+// Enum value maps for DigestAlgorithm.
 var (
-	MultiSignaturePolicy_name = map[int32]string{
-		0: "REQUIRE_ALL",
-		1: "REQUIRE_ANY",
-		2: "REQUIRE_QUORUM",
+	DigestAlgorithm_name = map[int32]string{
+		0: "SHA256",
+		1: "SHA384",
+		2: "SHA512",
+		3: "SHA3_256",
+		4: "SHA3_384",
+		5: "SHA3_512",
+		6: "BLAKE2B",
+		7: "BLAKE3",
 	}
-	MultiSignaturePolicy_value = map[string]int32{
-		"REQUIRE_ALL":    0,
-		"REQUIRE_ANY":    1,
-		"REQUIRE_QUORUM": 2,
+	DigestAlgorithm_value = map[string]int32{
+		"SHA256":   0,
+		"SHA384":   1,
+		"SHA512":   2,
+		"SHA3_256": 3,
+		"SHA3_384": 4,
+		"SHA3_512": 5,
+		"BLAKE2B":  6,
+		"BLAKE3":   7,
 	}
 )
 
-func (x MultiSignaturePolicy) Enum() *MultiSignaturePolicy {
-	p := new(MultiSignaturePolicy)
+func (x DigestAlgorithm) Enum() *DigestAlgorithm {
+	p := new(DigestAlgorithm)
 	*p = x
 	return p
 }
 
-func (x MultiSignaturePolicy) String() string {
+func (x DigestAlgorithm) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (MultiSignaturePolicy) Descriptor() protoreflect.EnumDescriptor {
+func (DigestAlgorithm) Descriptor() protoreflect.EnumDescriptor {
 	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[1].Descriptor()
 }
 
-func (MultiSignaturePolicy) Type() protoreflect.EnumType {
+func (DigestAlgorithm) Type() protoreflect.EnumType {
 	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[1]
 }
 
-func (x MultiSignaturePolicy) Number() protoreflect.EnumNumber {
+func (x DigestAlgorithm) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use MultiSignaturePolicy.Descriptor instead.
-func (MultiSignaturePolicy) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use DigestAlgorithm.Descriptor instead.
+func (DigestAlgorithm) EnumDescriptor() ([]byte, []int) {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{1}
 }
 
-// SignaturePolicy defines the rules and requirements for a set of signatures.
-type SignaturePolicy struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// total_signers is the total number of available signers for this policy.
-	TotalSigners int64 `protobuf:"varint,1,opt,name=total_signers,json=totalSigners,proto3" json:"total_signers,omitempty"`
-	// total_signatures is the total number of signatures collected.
-	TotalSignatures int64 `protobuf:"varint,2,opt,name=total_signatures,json=totalSignatures,proto3" json:"total_signatures,omitempty"`
-	// threshold is the minimum number of valid signatures required to satisfy the policy.
-	Threshold int64 `protobuf:"varint,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
-	// timestamp is the Unix timestamp (in seconds) when this policy was created.
-	Timestamp int64 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	// expiration is the Unix timestamp (in seconds) when this policy expires.
-	Expiration int64 `protobuf:"varint,5,opt,name=expiration,proto3" json:"expiration,omitempty"`
-	// nonce is a random value used to prevent replay attacks for this policy.
-	Nonce []byte `protobuf:"bytes,6,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	// multi_signature specifies the type of multi-signature policy applied.
-	MultiSignature MultiSignaturePolicy `protobuf:"varint,7,opt,name=multi_signature,json=multiSignature,proto3,enum=snverb.MultiSignaturePolicy" json:"multi_signature,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+type KeyExchangeAlgorithm int32
+
+const (
+	// X25519 is the X25519 elliptic curve Diffie-Hellman key exchange.
+	KeyExchangeAlgorithm_X25519 KeyExchangeAlgorithm = 0
+	// X448 is the X448 elliptic curve Diffie-Hellman key exchange.
+	KeyExchangeAlgorithm_X448 KeyExchangeAlgorithm = 1
+	// MLKEM512 is the ML-KEM-512 key encapsulation mechanism (NIST PQC).
+	KeyExchangeAlgorithm_MLKEM512 KeyExchangeAlgorithm = 2
+	// MLKEM768 is the ML-KEM-768 key encapsulation mechanism (NIST PQC).
+	KeyExchangeAlgorithm_MLKEM768 KeyExchangeAlgorithm = 3
+	// MLKEM1024 is the ML-KEM-1024 key encapsulation mechanism (NIST PQC).
+	KeyExchangeAlgorithm_MLKEM1024 KeyExchangeAlgorithm = 4
+)
+
+// Enum value maps for KeyExchangeAlgorithm.
+var (
+	KeyExchangeAlgorithm_name = map[int32]string{
+		0: "X25519",
+		1: "X448",
+		2: "MLKEM512",
+		3: "MLKEM768",
+		4: "MLKEM1024",
+	}
+	KeyExchangeAlgorithm_value = map[string]int32{
+		"X25519":    0,
+		"X448":      1,
+		"MLKEM512":  2,
+		"MLKEM768":  3,
+		"MLKEM1024": 4,
+	}
+)
+
+func (x KeyExchangeAlgorithm) Enum() *KeyExchangeAlgorithm {
+	p := new(KeyExchangeAlgorithm)
+	*p = x
+	return p
 }
 
-func (x *SignaturePolicy) Reset() {
-	*x = SignaturePolicy{}
+func (x KeyExchangeAlgorithm) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (KeyExchangeAlgorithm) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[2].Descriptor()
+}
+
+func (KeyExchangeAlgorithm) Type() protoreflect.EnumType {
+	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[2]
+}
+
+func (x KeyExchangeAlgorithm) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use KeyExchangeAlgorithm.Descriptor instead.
+func (KeyExchangeAlgorithm) EnumDescriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{2}
+}
+
+type EncryptionAlgorithm int32
+
+const (
+	// AES128_GCM is the Advanced Encryption Standard with 128-bit key in Galois/Counter Mode.
+	EncryptionAlgorithm_AES128_GCM EncryptionAlgorithm = 0
+	// AES256_GCM is the Advanced Encryption Standard with 256-bit key in Galois/Counter Mode.
+	EncryptionAlgorithm_AES256_GCM EncryptionAlgorithm = 1
+	// CHACHA20_POLY1305 is the ChaCha20-Poly1305 authenticated encryption algorithm.
+	EncryptionAlgorithm_CHACHA20_POLY1305 EncryptionAlgorithm = 2
+	// XCHACHA20_POLY1305 is the XChaCha20-Poly1305 authenticated encryption algorithm.
+	EncryptionAlgorithm_XCHACHA20_POLY1305 EncryptionAlgorithm = 3
+)
+
+// Enum value maps for EncryptionAlgorithm.
+var (
+	EncryptionAlgorithm_name = map[int32]string{
+		0: "AES128_GCM",
+		1: "AES256_GCM",
+		2: "CHACHA20_POLY1305",
+		3: "XCHACHA20_POLY1305",
+	}
+	EncryptionAlgorithm_value = map[string]int32{
+		"AES128_GCM":         0,
+		"AES256_GCM":         1,
+		"CHACHA20_POLY1305":  2,
+		"XCHACHA20_POLY1305": 3,
+	}
+)
+
+func (x EncryptionAlgorithm) Enum() *EncryptionAlgorithm {
+	p := new(EncryptionAlgorithm)
+	*p = x
+	return p
+}
+
+func (x EncryptionAlgorithm) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EncryptionAlgorithm) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[3].Descriptor()
+}
+
+func (EncryptionAlgorithm) Type() protoreflect.EnumType {
+	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[3]
+}
+
+func (x EncryptionAlgorithm) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EncryptionAlgorithm.Descriptor instead.
+func (EncryptionAlgorithm) EnumDescriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{3}
+}
+
+// RouterClass enumerates the types of router nodes in the network, indicating their level of functionality and resource requirements.
+type RouterClass int32
+
+const (
+	RouterClass_FULL_NODE RouterClass = 0 // Full-featured router with complete networking capabilities.
+	RouterClass_MINI_NODE RouterClass = 1 // Lightweight router with reduced functionality for smaller scale use.
+	RouterClass_NANO_NODE RouterClass = 2 // Minimal router optimized for ultra-low resource environments.
+)
+
+// Enum value maps for RouterClass.
+var (
+	RouterClass_name = map[int32]string{
+		0: "FULL_NODE",
+		1: "MINI_NODE",
+		2: "NANO_NODE",
+	}
+	RouterClass_value = map[string]int32{
+		"FULL_NODE": 0,
+		"MINI_NODE": 1,
+		"NANO_NODE": 2,
+	}
+)
+
+func (x RouterClass) Enum() *RouterClass {
+	p := new(RouterClass)
+	*p = x
+	return p
+}
+
+func (x RouterClass) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RouterClass) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[4].Descriptor()
+}
+
+func (RouterClass) Type() protoreflect.EnumType {
+	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[4]
+}
+
+func (x RouterClass) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RouterClass.Descriptor instead.
+func (RouterClass) EnumDescriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{4}
+}
+
+// RouterFeature lists the optional features that a router can support, influencing its role and capabilities in the network.
+type RouterFeature int32
+
+const (
+	RouterFeature_EXCHANGE RouterFeature = 0 // Supports key exchange operations for secure communication establishment.
+	RouterFeature_LEASE    RouterFeature = 1 // Provides address leasing services for dynamic network allocation.
+	RouterFeature_RELAY    RouterFeature = 2 // Acts as a relay for forwarding packets through the network.
+)
+
+// Enum value maps for RouterFeature.
+var (
+	RouterFeature_name = map[int32]string{
+		0: "EXCHANGE",
+		1: "LEASE",
+		2: "RELAY",
+	}
+	RouterFeature_value = map[string]int32{
+		"EXCHANGE": 0,
+		"LEASE":    1,
+		"RELAY":    2,
+	}
+)
+
+func (x RouterFeature) Enum() *RouterFeature {
+	p := new(RouterFeature)
+	*p = x
+	return p
+}
+
+func (x RouterFeature) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RouterFeature) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_snverb_v1alpha1_snverb_proto_enumTypes[5].Descriptor()
+}
+
+func (RouterFeature) Type() protoreflect.EnumType {
+	return &file_proto_snverb_v1alpha1_snverb_proto_enumTypes[5]
+}
+
+func (x RouterFeature) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RouterFeature.Descriptor instead.
+func (RouterFeature) EnumDescriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{5}
+}
+
+// IdentityKey represents a cryptographic public key with its unique identifier and the signature algorithm used.
+type IdentityKey struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	KeyId         []byte                 `protobuf:"bytes,1,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // 256-bit key id
+	Algorithm     SignatureAlgorithm     `protobuf:"varint,2,opt,name=algorithm,proto3,enum=snverb.SignatureAlgorithm" json:"algorithm,omitempty"`
+	PublicKey     []byte                 `protobuf:"bytes,3,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IdentityKey) Reset() {
+	*x = IdentityKey{}
 	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SignaturePolicy) String() string {
+func (x *IdentityKey) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SignaturePolicy) ProtoMessage() {}
+func (*IdentityKey) ProtoMessage() {}
 
-func (x *SignaturePolicy) ProtoReflect() protoreflect.Message {
+func (x *IdentityKey) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -250,71 +406,41 @@ func (x *SignaturePolicy) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SignaturePolicy.ProtoReflect.Descriptor instead.
-func (*SignaturePolicy) Descriptor() ([]byte, []int) {
+// Deprecated: Use IdentityKey.ProtoReflect.Descriptor instead.
+func (*IdentityKey) Descriptor() ([]byte, []int) {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SignaturePolicy) GetTotalSigners() int64 {
+func (x *IdentityKey) GetKeyId() []byte {
 	if x != nil {
-		return x.TotalSigners
-	}
-	return 0
-}
-
-func (x *SignaturePolicy) GetTotalSignatures() int64 {
-	if x != nil {
-		return x.TotalSignatures
-	}
-	return 0
-}
-
-func (x *SignaturePolicy) GetThreshold() int64 {
-	if x != nil {
-		return x.Threshold
-	}
-	return 0
-}
-
-func (x *SignaturePolicy) GetTimestamp() int64 {
-	if x != nil {
-		return x.Timestamp
-	}
-	return 0
-}
-
-func (x *SignaturePolicy) GetExpiration() int64 {
-	if x != nil {
-		return x.Expiration
-	}
-	return 0
-}
-
-func (x *SignaturePolicy) GetNonce() []byte {
-	if x != nil {
-		return x.Nonce
+		return x.KeyId
 	}
 	return nil
 }
 
-func (x *SignaturePolicy) GetMultiSignature() MultiSignaturePolicy {
+func (x *IdentityKey) GetAlgorithm() SignatureAlgorithm {
 	if x != nil {
-		return x.MultiSignature
+		return x.Algorithm
 	}
-	return MultiSignaturePolicy_REQUIRE_ALL
+	return SignatureAlgorithm_ED25519
 }
 
-// Signature represents a digital signature.
+func (x *IdentityKey) GetPublicKey() []byte {
+	if x != nil {
+		return x.PublicKey
+	}
+	return nil
+}
+
+// Signature contains the signature bytes along with the key ID, signature algorithm, and digest algorithm used for verification.
 type Signature struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// algorithm specifies the cryptographic algorithm used to generate this signature.
-	Algorithm Algorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=snverb.Algorithm" json:"algorithm,omitempty"`
-	// digest_algorithm specifies the hashing algorithm used to digest the signed content before signing.
-	DigestAlgorithm Algorithm `protobuf:"varint,2,opt,name=digest_algorithm,json=digestAlgorithm,proto3,enum=snverb.Algorithm" json:"digest_algorithm,omitempty"`
-	// signature is the raw bytes of the digital signature.
-	Signature     []byte `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	KeyId           []byte                 `protobuf:"bytes,1,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // 256-bit key id
+	Algorithm       SignatureAlgorithm     `protobuf:"varint,2,opt,name=algorithm,proto3,enum=snverb.SignatureAlgorithm" json:"algorithm,omitempty"`
+	DigestAlgorithm DigestAlgorithm        `protobuf:"varint,3,opt,name=digest_algorithm,json=digestAlgorithm,proto3,enum=snverb.DigestAlgorithm" json:"digest_algorithm,omitempty"`
+	Signature       []byte                 `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Signature) Reset() {
@@ -347,18 +473,25 @@ func (*Signature) Descriptor() ([]byte, []int) {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Signature) GetAlgorithm() Algorithm {
+func (x *Signature) GetKeyId() []byte {
+	if x != nil {
+		return x.KeyId
+	}
+	return nil
+}
+
+func (x *Signature) GetAlgorithm() SignatureAlgorithm {
 	if x != nil {
 		return x.Algorithm
 	}
-	return Algorithm_ED25519
+	return SignatureAlgorithm_ED25519
 }
 
-func (x *Signature) GetDigestAlgorithm() Algorithm {
+func (x *Signature) GetDigestAlgorithm() DigestAlgorithm {
 	if x != nil {
 		return x.DigestAlgorithm
 	}
-	return Algorithm_ED25519
+	return DigestAlgorithm_SHA256
 }
 
 func (x *Signature) GetSignature() []byte {
@@ -368,192 +501,17 @@ func (x *Signature) GetSignature() []byte {
 	return nil
 }
 
-// MultiSignature contains a serialized SignaturePolicy and a collection of individual signatures.
-type MultiSignature struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// policy is the serialized SignaturePolicy that governs these signatures.
-	Policy []byte `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
-	// signatures is a list of individual digital signatures.
-	Signatures    []*Signature `protobuf:"bytes,2,rep,name=signatures,proto3" json:"signatures,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *MultiSignature) Reset() {
-	*x = MultiSignature{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *MultiSignature) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MultiSignature) ProtoMessage() {}
-
-func (x *MultiSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use MultiSignature.ProtoReflect.Descriptor instead.
-func (*MultiSignature) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *MultiSignature) GetPolicy() []byte {
-	if x != nil {
-		return x.Policy
-	}
-	return nil
-}
-
-func (x *MultiSignature) GetSignatures() []*Signature {
-	if x != nil {
-		return x.Signatures
-	}
-	return nil
-}
-
-// PublicKey represents a cryptographic public key.
-type PublicKey struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// algorithm specifies the cryptographic algorithm associated with this public key.
-	Algorithm Algorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=snverb.Algorithm" json:"algorithm,omitempty"`
-	// key is the raw bytes of the public key.
-	Key           []byte `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PublicKey) Reset() {
-	*x = PublicKey{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PublicKey) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PublicKey) ProtoMessage() {}
-
-func (x *PublicKey) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PublicKey.ProtoReflect.Descriptor instead.
-func (*PublicKey) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *PublicKey) GetAlgorithm() Algorithm {
-	if x != nil {
-		return x.Algorithm
-	}
-	return Algorithm_ED25519
-}
-
-func (x *PublicKey) GetKey() []byte {
-	if x != nil {
-		return x.Key
-	}
-	return nil
-}
-
-// PrivateKey represents a cryptographic private key.
-type PrivateKey struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// algorithm specifies the cryptographic algorithm associated with this private key.
-	Algorithm Algorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=snverb.Algorithm" json:"algorithm,omitempty"`
-	// key is the raw bytes of the private key.
-	Key []byte `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	// public_key is the corresponding public key derived from this private key.
-	PublicKey     *PublicKey `protobuf:"bytes,3,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PrivateKey) Reset() {
-	*x = PrivateKey{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PrivateKey) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PrivateKey) ProtoMessage() {}
-
-func (x *PrivateKey) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PrivateKey.ProtoReflect.Descriptor instead.
-func (*PrivateKey) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *PrivateKey) GetAlgorithm() Algorithm {
-	if x != nil {
-		return x.Algorithm
-	}
-	return Algorithm_ED25519
-}
-
-func (x *PrivateKey) GetKey() []byte {
-	if x != nil {
-		return x.Key
-	}
-	return nil
-}
-
-func (x *PrivateKey) GetPublicKey() *PublicKey {
-	if x != nil {
-		return x.PublicKey
-	}
-	return nil
-}
-
-// Identity represents a collection of public keys that define an entity's identity.
+// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
 type Identity struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// public_keys is a list of public keys associated with this identity.
-	PublicKeys    []*PublicKey `protobuf:"bytes,1,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PublicKeys    []*IdentityKey         `protobuf:"bytes,1,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Identity) Reset() {
 	*x = Identity{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[5]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -565,7 +523,7 @@ func (x *Identity) String() string {
 func (*Identity) ProtoMessage() {}
 
 func (x *Identity) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[5]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -578,42 +536,43 @@ func (x *Identity) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Identity.ProtoReflect.Descriptor instead.
 func (*Identity) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{5}
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Identity) GetPublicKeys() []*PublicKey {
+func (x *Identity) GetPublicKeys() []*IdentityKey {
 	if x != nil {
 		return x.PublicKeys
 	}
 	return nil
 }
 
-// NodeMetadata contains essential information about a Supernet node.
-type NodeMetadata struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// address is the multiaddress list of the node.
-	Address *v1alpha1.AddressList `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// identity is the cryptographic identity of the node.
-	Identity      *Identity `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`
+// RouterInfo provides metadata about a router node, including its identity, network addresses, classification, and supported features.
+type RouterInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Version       int64                  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`                                                    // Version number of the router information for compatibility checking.
+	Identity      *Identity              `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`                                                   // Identity containing the public keys for this router.
+	AddressList   *v1alpha1.AddressList  `protobuf:"bytes,3,opt,name=address_list,json=addressList,proto3" json:"address_list,omitempty"`                          // List of network addresses where this router can be reached.
+	RouterClass   RouterClass            `protobuf:"varint,4,opt,name=router_class,json=routerClass,proto3,enum=snverb.RouterClass" json:"router_class,omitempty"` // Classification of the router determining its capabilities.
+	Features      []RouterFeature        `protobuf:"varint,5,rep,packed,name=features,proto3,enum=snverb.RouterFeature" json:"features,omitempty"`                 // List of features supported by this router node.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *NodeMetadata) Reset() {
-	*x = NodeMetadata{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
+func (x *RouterInfo) Reset() {
+	*x = RouterInfo{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *NodeMetadata) String() string {
+func (x *RouterInfo) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*NodeMetadata) ProtoMessage() {}
+func (*RouterInfo) ProtoMessage() {}
 
-func (x *NodeMetadata) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
+func (x *RouterInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,215 +583,42 @@ func (x *NodeMetadata) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use NodeMetadata.ProtoReflect.Descriptor instead.
-func (*NodeMetadata) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{6}
+// Deprecated: Use RouterInfo.ProtoReflect.Descriptor instead.
+func (*RouterInfo) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *NodeMetadata) GetAddress() *v1alpha1.AddressList {
+func (x *RouterInfo) GetVersion() int64 {
 	if x != nil {
-		return x.Address
+		return x.Version
 	}
-	return nil
+	return 0
 }
 
-func (x *NodeMetadata) GetIdentity() *Identity {
+func (x *RouterInfo) GetIdentity() *Identity {
 	if x != nil {
 		return x.Identity
 	}
 	return nil
 }
 
-// EncryptedData represents data that has been encrypted.
-type EncryptedData struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// data contains the encrypted ciphertext, potentially including authentication tags.
-	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	// nonce is the cryptographic nonce (number used once) used during encryption.
-	Nonce []byte `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	// algorithm specifies the encryption algorithm used.
-	Algorithm     Algorithm `protobuf:"varint,3,opt,name=algorithm,proto3,enum=snverb.Algorithm" json:"algorithm,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EncryptedData) Reset() {
-	*x = EncryptedData{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EncryptedData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EncryptedData) ProtoMessage() {}
-
-func (x *EncryptedData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
+func (x *RouterInfo) GetAddressList() *v1alpha1.AddressList {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EncryptedData.ProtoReflect.Descriptor instead.
-func (*EncryptedData) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *EncryptedData) GetData() []byte {
-	if x != nil {
-		return x.Data
+		return x.AddressList
 	}
 	return nil
 }
 
-func (x *EncryptedData) GetNonce() []byte {
+func (x *RouterInfo) GetRouterClass() RouterClass {
 	if x != nil {
-		return x.Nonce
+		return x.RouterClass
 	}
-	return nil
+	return RouterClass_FULL_NODE
 }
 
-func (x *EncryptedData) GetAlgorithm() Algorithm {
+func (x *RouterInfo) GetFeatures() []RouterFeature {
 	if x != nil {
-		return x.Algorithm
-	}
-	return Algorithm_ED25519
-}
-
-// Lease defines an authorized path or relay for a destination.
-type Lease struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
-	RelayNodeId         []byte                 `protobuf:"bytes,1,opt,name=relay_node_id,json=relayNodeId,proto3" json:"relay_node_id,omitempty"`                        // Hash of the RouterIdentity of the relay node
-	PathId              uint32                 `protobuf:"varint,2,opt,name=path_id,json=pathId,proto3" json:"path_id,omitempty"`                                        // Identifier for the specific path/tunnel
-	ExpirationTimestamp int64                  `protobuf:"varint,3,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"` // Unix timestamp in seconds when the lease expires
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
-}
-
-func (x *Lease) Reset() {
-	*x = Lease{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Lease) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Lease) ProtoMessage() {}
-
-func (x *Lease) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Lease.ProtoReflect.Descriptor instead.
-func (*Lease) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *Lease) GetRelayNodeId() []byte {
-	if x != nil {
-		return x.RelayNodeId
-	}
-	return nil
-}
-
-func (x *Lease) GetPathId() uint32 {
-	if x != nil {
-		return x.PathId
-	}
-	return 0
-}
-
-func (x *Lease) GetExpirationTimestamp() int64 {
-	if x != nil {
-		return x.ExpirationTimestamp
-	}
-	return 0
-}
-
-// LeaseSet contains a collection of Leases for a Supernet endpoint.
-type LeaseSet struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
-	EndpointIdentity    *Identity              `protobuf:"bytes,1,opt,name=endpoint_identity,json=endpointIdentity,proto3" json:"endpoint_identity,omitempty"`            // The identity of the endpoint
-	EncryptionPublicKey *PublicKey             `protobuf:"bytes,2,opt,name=encryption_public_key,json=encryptionPublicKey,proto3" json:"encryption_public_key,omitempty"` // Public key for encrypting messages to the endpoint
-	SigningPublicKey    *PublicKey             `protobuf:"bytes,3,opt,name=signing_public_key,json=signingPublicKey,proto3" json:"signing_public_key,omitempty"`          // Public key for signing this LeaseSet (e.g., for revocation)
-	Leases              []*Lease               `protobuf:"bytes,4,rep,name=leases,proto3" json:"leases,omitempty"`                                                        // List of active leases for the endpoint
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
-}
-
-func (x *LeaseSet) Reset() {
-	*x = LeaseSet{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LeaseSet) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LeaseSet) ProtoMessage() {}
-
-func (x *LeaseSet) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LeaseSet.ProtoReflect.Descriptor instead.
-func (*LeaseSet) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *LeaseSet) GetEndpointIdentity() *Identity {
-	if x != nil {
-		return x.EndpointIdentity
-	}
-	return nil
-}
-
-func (x *LeaseSet) GetEncryptionPublicKey() *PublicKey {
-	if x != nil {
-		return x.EncryptionPublicKey
-	}
-	return nil
-}
-
-func (x *LeaseSet) GetSigningPublicKey() *PublicKey {
-	if x != nil {
-		return x.SigningPublicKey
-	}
-	return nil
-}
-
-func (x *LeaseSet) GetLeases() []*Lease {
-	if x != nil {
-		return x.Leases
+		return x.Features
 	}
 	return nil
 }
@@ -841,89 +627,68 @@ var File_proto_snverb_v1alpha1_snverb_proto protoreflect.FileDescriptor
 
 const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\n" +
-	"\"proto/snverb/v1alpha1/snverb.proto\x12\x06snverb\x1a proto/maddr/v1alpha1/maddr.proto\"\x9a\x02\n" +
-	"\x0fSignaturePolicy\x12#\n" +
-	"\rtotal_signers\x18\x01 \x01(\x03R\ftotalSigners\x12)\n" +
-	"\x10total_signatures\x18\x02 \x01(\x03R\x0ftotalSignatures\x12\x1c\n" +
-	"\tthreshold\x18\x03 \x01(\x03R\tthreshold\x12\x1c\n" +
-	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\x12\x1e\n" +
+	"\"proto/snverb/v1alpha1/snverb.proto\x12\x06snverb\x1a proto/maddr/v1alpha1/maddr.proto\"}\n" +
+	"\vIdentityKey\x12\x15\n" +
+	"\x06key_id\x18\x01 \x01(\fR\x05keyId\x128\n" +
+	"\talgorithm\x18\x02 \x01(\x0e2\x1a.snverb.SignatureAlgorithmR\talgorithm\x12\x1d\n" +
 	"\n" +
-	"expiration\x18\x05 \x01(\x03R\n" +
-	"expiration\x12\x14\n" +
-	"\x05nonce\x18\x06 \x01(\fR\x05nonce\x12E\n" +
-	"\x0fmulti_signature\x18\a \x01(\x0e2\x1c.snverb.MultiSignaturePolicyR\x0emultiSignature\"\x98\x01\n" +
-	"\tSignature\x12/\n" +
-	"\talgorithm\x18\x01 \x01(\x0e2\x11.snverb.AlgorithmR\talgorithm\x12<\n" +
-	"\x10digest_algorithm\x18\x02 \x01(\x0e2\x11.snverb.AlgorithmR\x0fdigestAlgorithm\x12\x1c\n" +
-	"\tsignature\x18\x03 \x01(\fR\tsignature\"[\n" +
-	"\x0eMultiSignature\x12\x16\n" +
-	"\x06policy\x18\x01 \x01(\fR\x06policy\x121\n" +
+	"public_key\x18\x03 \x01(\fR\tpublicKey\"\xbe\x01\n" +
+	"\tSignature\x12\x15\n" +
+	"\x06key_id\x18\x01 \x01(\fR\x05keyId\x128\n" +
+	"\talgorithm\x18\x02 \x01(\x0e2\x1a.snverb.SignatureAlgorithmR\talgorithm\x12B\n" +
+	"\x10digest_algorithm\x18\x03 \x01(\x0e2\x17.snverb.DigestAlgorithmR\x0fdigestAlgorithm\x12\x1c\n" +
+	"\tsignature\x18\x04 \x01(\fR\tsignature\"@\n" +
+	"\bIdentity\x124\n" +
+	"\vpublic_keys\x18\x01 \x03(\v2\x13.snverb.IdentityKeyR\n" +
+	"publicKeys\"\xf6\x01\n" +
 	"\n" +
-	"signatures\x18\x02 \x03(\v2\x11.snverb.SignatureR\n" +
-	"signatures\"N\n" +
-	"\tPublicKey\x12/\n" +
-	"\talgorithm\x18\x01 \x01(\x0e2\x11.snverb.AlgorithmR\talgorithm\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\fR\x03key\"\x81\x01\n" +
-	"\n" +
-	"PrivateKey\x12/\n" +
-	"\talgorithm\x18\x01 \x01(\x0e2\x11.snverb.AlgorithmR\talgorithm\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\fR\x03key\x120\n" +
-	"\n" +
-	"public_key\x18\x03 \x01(\v2\x11.snverb.PublicKeyR\tpublicKey\">\n" +
-	"\bIdentity\x122\n" +
-	"\vpublic_keys\x18\x01 \x03(\v2\x11.snverb.PublicKeyR\n" +
-	"publicKeys\"j\n" +
-	"\fNodeMetadata\x12,\n" +
-	"\aaddress\x18\x01 \x01(\v2\x12.maddr.AddressListR\aaddress\x12,\n" +
-	"\bidentity\x18\x02 \x01(\v2\x10.snverb.IdentityR\bidentity\"j\n" +
-	"\rEncryptedData\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\x12\x14\n" +
-	"\x05nonce\x18\x02 \x01(\fR\x05nonce\x12/\n" +
-	"\talgorithm\x18\x03 \x01(\x0e2\x11.snverb.AlgorithmR\talgorithm\"w\n" +
-	"\x05Lease\x12\"\n" +
-	"\rrelay_node_id\x18\x01 \x01(\fR\vrelayNodeId\x12\x17\n" +
-	"\apath_id\x18\x02 \x01(\rR\x06pathId\x121\n" +
-	"\x14expiration_timestamp\x18\x03 \x01(\x03R\x13expirationTimestamp\"\xf8\x01\n" +
-	"\bLeaseSet\x12=\n" +
-	"\x11endpoint_identity\x18\x01 \x01(\v2\x10.snverb.IdentityR\x10endpointIdentity\x12E\n" +
-	"\x15encryption_public_key\x18\x02 \x01(\v2\x11.snverb.PublicKeyR\x13encryptionPublicKey\x12?\n" +
-	"\x12signing_public_key\x18\x03 \x01(\v2\x11.snverb.PublicKeyR\x10signingPublicKey\x12%\n" +
-	"\x06leases\x18\x04 \x03(\v2\r.snverb.LeaseR\x06leases*\xc1\x02\n" +
-	"\tAlgorithm\x12\v\n" +
+	"RouterInfo\x12\x18\n" +
+	"\aversion\x18\x01 \x01(\x03R\aversion\x12,\n" +
+	"\bidentity\x18\x02 \x01(\v2\x10.snverb.IdentityR\bidentity\x125\n" +
+	"\faddress_list\x18\x03 \x01(\v2\x12.maddr.AddressListR\vaddressList\x126\n" +
+	"\frouter_class\x18\x04 \x01(\x0e2\x13.snverb.RouterClassR\vrouterClass\x121\n" +
+	"\bfeatures\x18\x05 \x03(\x0e2\x15.snverb.RouterFeatureR\bfeatures*S\n" +
+	"\x12SignatureAlgorithm\x12\v\n" +
 	"\aED25519\x10\x00\x12\t\n" +
 	"\x05ED448\x10\x01\x12\v\n" +
 	"\aMLDSA44\x10\x02\x12\v\n" +
 	"\aMLDSA65\x10\x03\x12\v\n" +
-	"\aMLDSA87\x10\x04\x12\n" +
+	"\aMLDSA87\x10\x04*x\n" +
+	"\x0fDigestAlgorithm\x12\n" +
 	"\n" +
-	"\x06X25519\x10\x05\x12\b\n" +
-	"\x04X448\x10\x06\x12\f\n" +
-	"\bMLKEM512\x10\a\x12\f\n" +
-	"\bMLKEM768\x10\b\x12\r\n" +
-	"\tMLKEM1024\x10\t\x12\x0e\n" +
+	"\x06SHA256\x10\x00\x12\n" +
 	"\n" +
-	"AES128_GCM\x10\n" +
-	"\x12\x0e\n" +
+	"\x06SHA384\x10\x01\x12\n" +
 	"\n" +
-	"AES256_GCM\x10\v\x12\x15\n" +
-	"\x11CHACHA20_POLY1305\x10\f\x12\x16\n" +
-	"\x12XCHACHA20_POLY1305\x10\r\x12\n" +
+	"\x06SHA512\x10\x02\x12\f\n" +
+	"\bSHA3_256\x10\x03\x12\f\n" +
+	"\bSHA3_384\x10\x04\x12\f\n" +
+	"\bSHA3_512\x10\x05\x12\v\n" +
+	"\aBLAKE2B\x10\x06\x12\n" +
 	"\n" +
-	"\x06SHA256\x10\x0e\x12\n" +
+	"\x06BLAKE3\x10\a*W\n" +
+	"\x14KeyExchangeAlgorithm\x12\n" +
 	"\n" +
-	"\x06SHA384\x10\x0f\x12\n" +
+	"\x06X25519\x10\x00\x12\b\n" +
+	"\x04X448\x10\x01\x12\f\n" +
+	"\bMLKEM512\x10\x02\x12\f\n" +
+	"\bMLKEM768\x10\x03\x12\r\n" +
+	"\tMLKEM1024\x10\x04*d\n" +
+	"\x13EncryptionAlgorithm\x12\x0e\n" +
 	"\n" +
-	"\x06SHA512\x10\x10\x12\f\n" +
-	"\bSHA3_256\x10\x11\x12\f\n" +
-	"\bSHA3_384\x10\x12\x12\f\n" +
-	"\bSHA3_512\x10\x13\x12\v\n" +
-	"\aBLAKE2B\x10\x14\x12\n" +
+	"AES128_GCM\x10\x00\x12\x0e\n" +
 	"\n" +
-	"\x06BLAKE3\x10\x15*L\n" +
-	"\x14MultiSignaturePolicy\x12\x0f\n" +
-	"\vREQUIRE_ALL\x10\x00\x12\x0f\n" +
-	"\vREQUIRE_ANY\x10\x01\x12\x12\n" +
-	"\x0eREQUIRE_QUORUM\x10\x02B\x83\x01\n" +
+	"AES256_GCM\x10\x01\x12\x15\n" +
+	"\x11CHACHA20_POLY1305\x10\x02\x12\x16\n" +
+	"\x12XCHACHA20_POLY1305\x10\x03*:\n" +
+	"\vRouterClass\x12\r\n" +
+	"\tFULL_NODE\x10\x00\x12\r\n" +
+	"\tMINI_NODE\x10\x01\x12\r\n" +
+	"\tNANO_NODE\x10\x02*3\n" +
+	"\rRouterFeature\x12\f\n" +
+	"\bEXCHANGE\x10\x00\x12\t\n" +
+	"\x05LEASE\x10\x01\x12\t\n" +
+	"\x05RELAY\x10\x02B\x83\x01\n" +
 	"\n" +
 	"com.snverbB\vSnverbProtoP\x01Z0gosuda.org/supernet/proto/snverb/v1alpha1;snverb\xa2\x02\x03SXX\xaa\x02\x06Snverb\xca\x02\x06Snverb\xe2\x02\x12Snverb\\GPBMetadata\xea\x02\x06Snverbb\x06proto3"
 
@@ -939,44 +704,35 @@ func file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP() []byte {
 	return file_proto_snverb_v1alpha1_snverb_proto_rawDescData
 }
 
-var file_proto_snverb_v1alpha1_snverb_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_proto_snverb_v1alpha1_snverb_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
+var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
-	(Algorithm)(0),               // 0: snverb.Algorithm
-	(MultiSignaturePolicy)(0),    // 1: snverb.MultiSignaturePolicy
-	(*SignaturePolicy)(nil),      // 2: snverb.SignaturePolicy
-	(*Signature)(nil),            // 3: snverb.Signature
-	(*MultiSignature)(nil),       // 4: snverb.MultiSignature
-	(*PublicKey)(nil),            // 5: snverb.PublicKey
-	(*PrivateKey)(nil),           // 6: snverb.PrivateKey
-	(*Identity)(nil),             // 7: snverb.Identity
-	(*NodeMetadata)(nil),         // 8: snverb.NodeMetadata
-	(*EncryptedData)(nil),        // 9: snverb.EncryptedData
-	(*Lease)(nil),                // 10: snverb.Lease
-	(*LeaseSet)(nil),             // 11: snverb.LeaseSet
-	(*v1alpha1.AddressList)(nil), // 12: maddr.AddressList
+	(SignatureAlgorithm)(0),      // 0: snverb.SignatureAlgorithm
+	(DigestAlgorithm)(0),         // 1: snverb.DigestAlgorithm
+	(KeyExchangeAlgorithm)(0),    // 2: snverb.KeyExchangeAlgorithm
+	(EncryptionAlgorithm)(0),     // 3: snverb.EncryptionAlgorithm
+	(RouterClass)(0),             // 4: snverb.RouterClass
+	(RouterFeature)(0),           // 5: snverb.RouterFeature
+	(*IdentityKey)(nil),          // 6: snverb.IdentityKey
+	(*Signature)(nil),            // 7: snverb.Signature
+	(*Identity)(nil),             // 8: snverb.Identity
+	(*RouterInfo)(nil),           // 9: snverb.RouterInfo
+	(*v1alpha1.AddressList)(nil), // 10: maddr.AddressList
 }
 var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
-	1,  // 0: snverb.SignaturePolicy.multi_signature:type_name -> snverb.MultiSignaturePolicy
-	0,  // 1: snverb.Signature.algorithm:type_name -> snverb.Algorithm
-	0,  // 2: snverb.Signature.digest_algorithm:type_name -> snverb.Algorithm
-	3,  // 3: snverb.MultiSignature.signatures:type_name -> snverb.Signature
-	0,  // 4: snverb.PublicKey.algorithm:type_name -> snverb.Algorithm
-	0,  // 5: snverb.PrivateKey.algorithm:type_name -> snverb.Algorithm
-	5,  // 6: snverb.PrivateKey.public_key:type_name -> snverb.PublicKey
-	5,  // 7: snverb.Identity.public_keys:type_name -> snverb.PublicKey
-	12, // 8: snverb.NodeMetadata.address:type_name -> maddr.AddressList
-	7,  // 9: snverb.NodeMetadata.identity:type_name -> snverb.Identity
-	0,  // 10: snverb.EncryptedData.algorithm:type_name -> snverb.Algorithm
-	7,  // 11: snverb.LeaseSet.endpoint_identity:type_name -> snverb.Identity
-	5,  // 12: snverb.LeaseSet.encryption_public_key:type_name -> snverb.PublicKey
-	5,  // 13: snverb.LeaseSet.signing_public_key:type_name -> snverb.PublicKey
-	10, // 14: snverb.LeaseSet.leases:type_name -> snverb.Lease
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	0,  // 0: snverb.IdentityKey.algorithm:type_name -> snverb.SignatureAlgorithm
+	0,  // 1: snverb.Signature.algorithm:type_name -> snverb.SignatureAlgorithm
+	1,  // 2: snverb.Signature.digest_algorithm:type_name -> snverb.DigestAlgorithm
+	6,  // 3: snverb.Identity.public_keys:type_name -> snverb.IdentityKey
+	8,  // 4: snverb.RouterInfo.identity:type_name -> snverb.Identity
+	10, // 5: snverb.RouterInfo.address_list:type_name -> maddr.AddressList
+	4,  // 6: snverb.RouterInfo.router_class:type_name -> snverb.RouterClass
+	5,  // 7: snverb.RouterInfo.features:type_name -> snverb.RouterFeature
+	8,  // [8:8] is the sub-list for method output_type
+	8,  // [8:8] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_snverb_v1alpha1_snverb_proto_init() }
@@ -989,8 +745,8 @@ func file_proto_snverb_v1alpha1_snverb_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_snverb_v1alpha1_snverb_proto_rawDesc), len(file_proto_snverb_v1alpha1_snverb_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   10,
+			NumEnums:      6,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

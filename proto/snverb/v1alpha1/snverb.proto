@@ -6,8 +6,8 @@ import "proto/maddr/v1alpha1/maddr.proto";
 
 option go_package = "gosuda.org/supernet/proto/snverb/v1alpha1;snverb";
 
-// Algorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
-enum Algorithm {
+// SigningAlgorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
+enum SignatureAlgorithm {
   // ED25519 is the Ed25519 digital signature algorithm.
   ED25519 = 0;
   // ED448 is the Ed448 digital signature algorithm.
@@ -19,145 +19,109 @@ enum Algorithm {
   MLDSA65 = 3;
   // MLDSA87 is the ML-DSA-87 digital signature algorithm (NIST PQC).
   MLDSA87 = 4;
+}
 
+enum DigestAlgorithm {
+  // SHA256 is the SHA-256 digest algorithm.
+  SHA256 = 0;
+  // SHA384 is the SHA-384 digest algorithm.
+  SHA384 = 1;
+  // SHA512 is the SHA-512 digest algorithm.
+  SHA512 = 2;
+  // SHA3_256 is the SHA3-256 digest algorithm.
+  SHA3_256 = 3;
+  // SHA3_384 is the SHA3-384 digest algorithm.
+  SHA3_384 = 4;
+  // SHA3_512 is the SHA3-512 digest algorithm.
+  SHA3_512 = 5;
+  // BLAKE2B is the BLAKE2b digest algorithm.
+  BLAKE2B = 6;
+  // BLAKE3 is the BLAKE3 digest algorithm.
+  BLAKE3 = 7;
+}
+
+enum KeyExchangeAlgorithm {
   // X25519 is the X25519 elliptic curve Diffie-Hellman key exchange.
-  X25519 = 5;
+  X25519 = 0;
   // X448 is the X448 elliptic curve Diffie-Hellman key exchange.
-  X448 = 6;
+  X448 = 1;
 
   // MLKEM512 is the ML-KEM-512 key encapsulation mechanism (NIST PQC).
-  MLKEM512 = 7;
+  MLKEM512 = 2;
   // MLKEM768 is the ML-KEM-768 key encapsulation mechanism (NIST PQC).
-  MLKEM768 = 8;
+  MLKEM768 = 3;
   // MLKEM1024 is the ML-KEM-1024 key encapsulation mechanism (NIST PQC).
-  MLKEM1024 = 9;
+  MLKEM1024 = 4;
+}
 
+enum EncryptionAlgorithm {
   // AES128_GCM is the Advanced Encryption Standard with 128-bit key in Galois/Counter Mode.
-  AES128_GCM = 10;
+  AES128_GCM = 0;
   // AES256_GCM is the Advanced Encryption Standard with 256-bit key in Galois/Counter Mode.
-  AES256_GCM = 11;
+  AES256_GCM = 1;
   // CHACHA20_POLY1305 is the ChaCha20-Poly1305 authenticated encryption algorithm.
-  CHACHA20_POLY1305 = 12;
+  CHACHA20_POLY1305 = 2;
   // XCHACHA20_POLY1305 is the XChaCha20-Poly1305 authenticated encryption algorithm.
-  XCHACHA20_POLY1305 = 13;
-
-  // SHA256 is the SHA-256 digest algorithm.
-  SHA256 = 14;
-  // SHA384 is the SHA-384 digest algorithm.
-  SHA384 = 15;
-  // SHA512 is the SHA-512 digest algorithm.
-  SHA512 = 16;
-  // SHA3_256 is the SHA3-256 digest algorithm.
-  SHA3_256 = 17;
-  // SHA3_384 is the SHA3-384 digest algorithm.
-  SHA3_384 = 18;
-  // SHA3_512 is the SHA3-512 digest algorithm.
-  SHA3_512 = 19;
-  // BLAKE2B is the BLAKE2b digest algorithm.
-  BLAKE2B = 20;
-  // BLAKE3 is the BLAKE3 digest algorithm.
-  BLAKE3 = 21;
+  XCHACHA20_POLY1305 = 3;
 }
 
-// MultiSignaturePolicy defines the policy for validating multiple signatures.
-enum MultiSignaturePolicy {
-  // REQUIRE_ALL means all provided signatures must be valid.
-  REQUIRE_ALL = 0;
-  // REQUIRE_ANY means at least one valid signature is sufficient.
-  REQUIRE_ANY = 1;
-  // REQUIRE_QUORUM means a specified threshold of valid signatures is required.
-  REQUIRE_QUORUM = 2;
+// IdentityKey represents a cryptographic public key with its unique identifier and the signature algorithm used.
+message IdentityKey {
+  bytes key_id = 1; // 256-bit key id
+  SignatureAlgorithm algorithm = 2;
+  bytes public_key = 3;
 }
 
-// SignaturePolicy defines the rules and requirements for a set of signatures.
-message SignaturePolicy {
-  // total_signers is the total number of available signers for this policy.
-  int64 total_signers = 1;
-  // total_signatures is the total number of signatures collected.
-  int64 total_signatures = 2;
-  // threshold is the minimum number of valid signatures required to satisfy the policy.
-  int64 threshold = 3;
-  // timestamp is the Unix timestamp (in seconds) when this policy was created.
-  int64 timestamp = 4;
-  // expiration is the Unix timestamp (in seconds) when this policy expires.
-  int64 expiration = 5;
-  // nonce is a random value used to prevent replay attacks for this policy.
-  bytes nonce = 6;
-  // multi_signature specifies the type of multi-signature policy applied.
-  MultiSignaturePolicy multi_signature = 7;
-}
-
-// Signature represents a digital signature.
+// Signature contains the signature bytes along with the key ID, signature algorithm, and digest algorithm used for verification.
 message Signature {
-  // algorithm specifies the cryptographic algorithm used to generate this signature.
-  Algorithm algorithm = 1;
-  // digest_algorithm specifies the hashing algorithm used to digest the signed content before signing.
-  Algorithm digest_algorithm = 2;
-  // signature is the raw bytes of the digital signature.
-  bytes signature = 3;
+  bytes key_id = 1; // 256-bit key id
+  SignatureAlgorithm algorithm = 2;
+  DigestAlgorithm digest_algorithm = 3;
+  bytes signature = 4;
 }
 
-// MultiSignature contains a serialized SignaturePolicy and a collection of individual signatures.
-message MultiSignature {
-  // policy is the serialized SignaturePolicy that governs these signatures.
-  bytes policy = 1;
-  // signatures is a list of individual digital signatures.
-  repeated Signature signatures = 2;
-}
-
-// PublicKey represents a cryptographic public key.
-message PublicKey {
-  // algorithm specifies the cryptographic algorithm associated with this public key.
-  Algorithm algorithm = 1;
-  // key is the raw bytes of the public key.
-  bytes key = 2;
-}
-
-// PrivateKey represents a cryptographic private key.
-message PrivateKey {
-  // algorithm specifies the cryptographic algorithm associated with this private key.
-  Algorithm algorithm = 1;
-  // key is the raw bytes of the private key.
-  bytes key = 2;
-  // public_key is the corresponding public key derived from this private key.
-  PublicKey public_key = 3;
-}
-
-// Identity represents a collection of public keys that define an entity's identity.
+// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
 message Identity {
-  // public_keys is a list of public keys associated with this identity.
-  repeated PublicKey public_keys = 1;
+  repeated IdentityKey public_keys = 1;
 }
 
-// NodeMetadata contains essential information about a Supernet node.
-message NodeMetadata {
-  // address is the multiaddress list of the node.
-  maddr.AddressList address = 1;
-  // identity is the cryptographic identity of the node.
-  Identity identity = 2;
+// RouterClass enumerates the types of router nodes in the network, indicating their level of functionality and resource requirements.
+enum RouterClass {
+  FULL_NODE = 0; // Full-featured router with complete networking capabilities.
+  MINI_NODE = 1; // Lightweight router with reduced functionality for smaller scale use.
+  NANO_NODE = 2; // Minimal router optimized for ultra-low resource environments.
 }
 
-// EncryptedData represents data that has been encrypted.
-message EncryptedData {
-  // data contains the encrypted ciphertext, potentially including authentication tags.
-  bytes data = 1;
-  // nonce is the cryptographic nonce (number used once) used during encryption.
-  bytes nonce = 2;
-  // algorithm specifies the encryption algorithm used.
-  Algorithm algorithm = 3;
+// RouterFeature lists the optional features that a router can support, influencing its role and capabilities in the network.
+enum RouterFeature {
+  EXCHANGE = 0; // Supports key exchange operations for secure communication establishment.
+  LEASE = 1; // Provides address leasing services for dynamic network allocation.
+  RELAY = 2; // Acts as a relay for forwarding packets through the network.
 }
 
-// Lease defines an authorized path or relay for a destination.
-message Lease {
-  bytes relay_node_id = 1; // Hash of the RouterIdentity of the relay node
-  uint32 path_id = 2; // Identifier for the specific path/tunnel
-  int64 expiration_timestamp = 3; // Unix timestamp in seconds when the lease expires
+// RouterInfo provides metadata about a router node, including its identity, network addresses, classification, and supported features.
+message RouterInfo {
+  int64 version = 1; // Version number of the router information for compatibility checking.
+  int64 timestamp = 2; // Timestamp of the router information.
+  Identity identity = 3; // Identity containing the public keys for this router.
+  maddr.AddressList address_list = 4; // List of network addresses where this router can be reached.
+  RouterClass router_class = 5; // Classification of the router determining its capabilities.
+  repeated RouterFeature features = 6; // List of features supported by this router node.
 }
 
-// LeaseSet contains a collection of Leases for a Supernet endpoint.
-message LeaseSet {
-  Identity endpoint_identity = 1; // The identity of the endpoint
-  PublicKey encryption_public_key = 2; // Public key for encrypting messages to the endpoint
-  PublicKey signing_public_key = 3; // Public key for signing this LeaseSet (e.g., for revocation)
-  repeated Lease leases = 4; // List of active leases for the endpoint
+// SignedRouterInfo is a RouterInfo message signed by the router's identity.
+message SignedRouterInfo {
+  bytes router_id = 1;
+  bytes router_info = 2;
+  Signature signature = 3;
+}
+
+message VirtualAddress {
+  Identity identity = 1;
+}
+
+message TunnelDescriptor {
+  bytes tunnel_id = 1;
+  bytes destination = 2;
+  bytes source = 3;
 }
