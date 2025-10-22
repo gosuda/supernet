@@ -13,12 +13,19 @@ enum SignatureAlgorithm {
   // ED448 is the Ed448 digital signature algorithm.
   ED448 = 1;
 
+  // ECDSA_NIST_P256 is the ECDSA with NIST P-256 curve.
+  ECDSA_NIST_P256 = 2;
+  // ECDSA_NIST_P384 is the ECDSA with NIST P-384 curve.
+  ECDSA_NIST_P384 = 3;
+  // ECDSA_NIST_P521 is the ECDSA with NIST P-521 curve.
+  ECDSA_NIST_P521 = 4;
+
   // MLDSA44 is the ML-DSA-44 digital signature algorithm (NIST PQC).
-  MLDSA44 = 2;
+  MLDSA44 = 5;
   // MLDSA65 is the ML-DSA-65 digital signature algorithm (NIST PQC).
-  MLDSA65 = 3;
+  MLDSA65 = 6;
   // MLDSA87 is the ML-DSA-87 digital signature algorithm (NIST PQC).
-  MLDSA87 = 4;
+  MLDSA87 = 7;
 }
 
 enum DigestAlgorithm {
@@ -46,12 +53,19 @@ enum KeyExchangeAlgorithm {
   // X448 is the X448 elliptic curve Diffie-Hellman key exchange.
   X448 = 1;
 
+  // ECDH_NIST_P256 is the ECDH with NIST P-256 curve.
+  ECDH_NIST_P256 = 2;
+  // ECDH_NIST_P384 is the ECDH with NIST P-384 curve.
+  ECDH_NIST_P384 = 3;
+  // ECDH_NIST_P521 is the ECDH with NIST P-521 curve.
+  ECDH_NIST_P521 = 4;
+
   // MLKEM512 is the ML-KEM-512 key encapsulation mechanism (NIST PQC).
-  MLKEM512 = 2;
+  MLKEM512 = 5;
   // MLKEM768 is the ML-KEM-768 key encapsulation mechanism (NIST PQC).
-  MLKEM768 = 3;
+  MLKEM768 = 6;
   // MLKEM1024 is the ML-KEM-1024 key encapsulation mechanism (NIST PQC).
-  MLKEM1024 = 4;
+  MLKEM1024 = 7;
 }
 
 enum EncryptionAlgorithm {
@@ -67,17 +81,21 @@ enum EncryptionAlgorithm {
 
 // IdentityKey represents a cryptographic public key with its unique identifier and the signature algorithm used.
 message IdentityKey {
-  bytes key_id = 1; // 256-bit key id
+  uint64 key_id = 1; // 64-bit key id
   SignatureAlgorithm algorithm = 2;
   bytes public_key = 3;
 }
 
 // Signature contains the signature bytes along with the key ID, signature algorithm, and digest algorithm used for verification.
 message Signature {
-  bytes key_id = 1; // 256-bit key id
+  uint64 key_id = 1; // 64-bit key id
   SignatureAlgorithm algorithm = 2;
   DigestAlgorithm digest_algorithm = 3;
   bytes signature = 4;
+}
+
+message MultiSignature {
+  repeated Signature signatures = 1;
 }
 
 // Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
@@ -101,27 +119,48 @@ enum RouterFeature {
 
 // RouterInfo provides metadata about a router node, including its identity, network addresses, classification, and supported features.
 message RouterInfo {
-  int64 version = 1; // Version number of the router information for compatibility checking.
-  int64 timestamp = 2; // Timestamp of the router information.
-  Identity identity = 3; // Identity containing the public keys for this router.
-  maddr.AddressList address_list = 4; // List of network addresses where this router can be reached.
-  RouterClass router_class = 5; // Classification of the router determining its capabilities.
-  repeated RouterFeature features = 6; // List of features supported by this router node.
+  bytes router_id = 1; // 128-bit router id
+  Identity identity = 2; // Identity containing the public keys for this router.
+  int64 version = 3; // Version number of the router information for compatibility checking.
+  int64 timestamp = 4; // Timestamp of the router information.
+  maddr.AddressList address_list = 5; // List of network addresses where this router can be reached.
+  RouterClass router_class = 6; // Classification of the router determining its capabilities.
+  repeated RouterFeature features = 7; // List of features supported by this router node.
 }
 
 // SignedRouterInfo is a RouterInfo message signed by the router's identity.
 message SignedRouterInfo {
-  bytes router_id = 1;
-  bytes router_info = 2;
-  Signature signature = 3;
+  bytes router_info = 1; // RouterInfo message serialized to bytes.
+  MultiSignature signature = 2; // MultiSignature of the RouterInfo message. (policy: any)
 }
 
+// VirtualAddress represents a virtual address in the network.
 message VirtualAddress {
-  Identity identity = 1;
+  Identity identity = 1; // Identity of the virtual address
 }
 
+// Dropzone is a logical home for a virtual address.
+message Dropzone {
+  bytes router_id = 1; // 128-bit router id
+  bytes tunnel_id = 2; // 128-bit tunnel id
+}
+
+// DropzoneSet is a set of dropzones for a virtual address.
+message DropzoneSet {
+  bytes virtual_address = 1; // 128-bit virtual address id
+  int64 timestamp = 2; // Timestamp of the dropzone set
+  repeated Dropzone dropzones = 3; // List of dropzones for the virtual address
+}
+
+// SignedDropzoneSet is a DropzoneSet message signed by the router's identity.
+message SignedDropzoneSet {
+  bytes dropzone_set = 1; // DropzoneSet message serialized to bytes.
+  MultiSignature signature = 2; // MultiSignature of the DropzoneSet message. (policy: any)
+}
+
+// TunnelDescriptor represents a tunnel between two endpoints, including the tunnel ID, destination, and source.
 message TunnelDescriptor {
-  bytes tunnel_id = 1;
-  bytes destination = 2;
-  bytes source = 3;
+  bytes tunnel_id = 1; // 128-bit tunnel id
+  bytes destination = 2; // 128-bit destination id
+  bytes source = 3; // 128-bit source id
 }
