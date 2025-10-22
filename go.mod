@@ -1,6 +1,6 @@
 module gosuda.org/supernet
 
-go 1.25rc1
+go 1.25.3
 
 require (
 	github.com/planetscale/vtprotobuf v0.6.0
