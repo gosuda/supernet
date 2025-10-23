@@ -43,6 +43,29 @@ func (m *IdentityKey) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
+func (m *Identity) CloneVT() *Identity {
+	if m == nil {
+		return (*Identity)(nil)
+	}
+	r := new(Identity)
+	if rhs := m.PublicKeys; rhs != nil {
+		tmpContainer := make([]*IdentityKey, len(rhs))
+		for k, v := range rhs {
+			tmpContainer[k] = v.CloneVT()
+		}
+		r.PublicKeys = tmpContainer
+	}
+	if len(m.unknownFields) > 0 {
+		r.unknownFields = make([]byte, len(m.unknownFields))
+		copy(r.unknownFields, m.unknownFields)
+	}
+	return r
+}
+
+func (m *Identity) CloneMessageVT() proto.Message {
+	return m.CloneVT()
+}
+
 func (m *Signature) CloneVT() *Signature {
 	if m == nil {
 		return (*Signature)(nil)
@@ -87,29 +110,6 @@ func (m *MultiSignature) CloneVT() *MultiSignature {
 }
 
 func (m *MultiSignature) CloneMessageVT() proto.Message {
-	return m.CloneVT()
-}
-
-func (m *Identity) CloneVT() *Identity {
-	if m == nil {
-		return (*Identity)(nil)
-	}
-	r := new(Identity)
-	if rhs := m.PublicKeys; rhs != nil {
-		tmpContainer := make([]*IdentityKey, len(rhs))
-		for k, v := range rhs {
-			tmpContainer[k] = v.CloneVT()
-		}
-		r.PublicKeys = tmpContainer
-	}
-	if len(m.unknownFields) > 0 {
-		r.unknownFields = make([]byte, len(m.unknownFields))
-		copy(r.unknownFields, m.unknownFields)
-	}
-	return r
-}
-
-func (m *Identity) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
@@ -172,28 +172,11 @@ func (m *SignedRouterInfo) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
-func (m *VirtualAddress) CloneVT() *VirtualAddress {
+func (m *DropZone) CloneVT() *DropZone {
 	if m == nil {
-		return (*VirtualAddress)(nil)
+		return (*DropZone)(nil)
 	}
-	r := new(VirtualAddress)
-	r.Identity = m.Identity.CloneVT()
-	if len(m.unknownFields) > 0 {
-		r.unknownFields = make([]byte, len(m.unknownFields))
-		copy(r.unknownFields, m.unknownFields)
-	}
-	return r
-}
-
-func (m *VirtualAddress) CloneMessageVT() proto.Message {
-	return m.CloneVT()
-}
-
-func (m *Dropzone) CloneVT() *Dropzone {
-	if m == nil {
-		return (*Dropzone)(nil)
-	}
-	r := new(Dropzone)
+	r := new(DropZone)
 	if rhs := m.RouterId; rhs != nil {
 		tmpBytes := make([]byte, len(rhs))
 		copy(tmpBytes, rhs)
@@ -211,15 +194,16 @@ func (m *Dropzone) CloneVT() *Dropzone {
 	return r
 }
 
-func (m *Dropzone) CloneMessageVT() proto.Message {
+func (m *DropZone) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
-func (m *DropzoneSet) CloneVT() *DropzoneSet {
+func (m *DropZoneSet) CloneVT() *DropZoneSet {
 	if m == nil {
-		return (*DropzoneSet)(nil)
+		return (*DropZoneSet)(nil)
 	}
-	r := new(DropzoneSet)
+	r := new(DropZoneSet)
+	r.Identity = m.Identity.CloneVT()
 	r.Timestamp = m.Timestamp
 	if rhs := m.VirtualAddress; rhs != nil {
 		tmpBytes := make([]byte, len(rhs))
@@ -227,7 +211,7 @@ func (m *DropzoneSet) CloneVT() *DropzoneSet {
 		r.VirtualAddress = tmpBytes
 	}
 	if rhs := m.Dropzones; rhs != nil {
-		tmpContainer := make([]*Dropzone, len(rhs))
+		tmpContainer := make([]*DropZone, len(rhs))
 		for k, v := range rhs {
 			tmpContainer[k] = v.CloneVT()
 		}
@@ -240,15 +224,15 @@ func (m *DropzoneSet) CloneVT() *DropzoneSet {
 	return r
 }
 
-func (m *DropzoneSet) CloneMessageVT() proto.Message {
+func (m *DropZoneSet) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
-func (m *SignedDropzoneSet) CloneVT() *SignedDropzoneSet {
+func (m *SignedDropZoneSet) CloneVT() *SignedDropZoneSet {
 	if m == nil {
-		return (*SignedDropzoneSet)(nil)
+		return (*SignedDropZoneSet)(nil)
 	}
-	r := new(SignedDropzoneSet)
+	r := new(SignedDropZoneSet)
 	r.Signature = m.Signature.CloneVT()
 	if rhs := m.DropzoneSet; rhs != nil {
 		tmpBytes := make([]byte, len(rhs))
@@ -262,7 +246,7 @@ func (m *SignedDropzoneSet) CloneVT() *SignedDropzoneSet {
 	return r
 }
 
-func (m *SignedDropzoneSet) CloneMessageVT() proto.Message {
+func (m *SignedDropZoneSet) CloneMessageVT() proto.Message {
 	return m.CloneVT()
 }
 
@@ -317,6 +301,39 @@ func (this *IdentityKey) EqualVT(that *IdentityKey) bool {
 
 func (this *IdentityKey) EqualMessageVT(thatMsg proto.Message) bool {
 	that, ok := thatMsg.(*IdentityKey)
+	if !ok {
+		return false
+	}
+	return this.EqualVT(that)
+}
+func (this *Identity) EqualVT(that *Identity) bool {
+	if this == that {
+		return true
+	} else if this == nil || that == nil {
+		return false
+	}
+	if len(this.PublicKeys) != len(that.PublicKeys) {
+		return false
+	}
+	for i, vx := range this.PublicKeys {
+		vy := that.PublicKeys[i]
+		if p, q := vx, vy; p != q {
+			if p == nil {
+				p = &IdentityKey{}
+			}
+			if q == nil {
+				q = &IdentityKey{}
+			}
+			if !p.EqualVT(q) {
+				return false
+			}
+		}
+	}
+	return string(this.unknownFields) == string(that.unknownFields)
+}
+
+func (this *Identity) EqualMessageVT(thatMsg proto.Message) bool {
+	that, ok := thatMsg.(*Identity)
 	if !ok {
 		return false
 	}
@@ -378,39 +395,6 @@ func (this *MultiSignature) EqualVT(that *MultiSignature) bool {
 
 func (this *MultiSignature) EqualMessageVT(thatMsg proto.Message) bool {
 	that, ok := thatMsg.(*MultiSignature)
-	if !ok {
-		return false
-	}
-	return this.EqualVT(that)
-}
-func (this *Identity) EqualVT(that *Identity) bool {
-	if this == that {
-		return true
-	} else if this == nil || that == nil {
-		return false
-	}
-	if len(this.PublicKeys) != len(that.PublicKeys) {
-		return false
-	}
-	for i, vx := range this.PublicKeys {
-		vy := that.PublicKeys[i]
-		if p, q := vx, vy; p != q {
-			if p == nil {
-				p = &IdentityKey{}
-			}
-			if q == nil {
-				q = &IdentityKey{}
-			}
-			if !p.EqualVT(q) {
-				return false
-			}
-		}
-	}
-	return string(this.unknownFields) == string(that.unknownFields)
-}
-
-func (this *Identity) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*Identity)
 	if !ok {
 		return false
 	}
@@ -487,26 +471,7 @@ func (this *SignedRouterInfo) EqualMessageVT(thatMsg proto.Message) bool {
 	}
 	return this.EqualVT(that)
 }
-func (this *VirtualAddress) EqualVT(that *VirtualAddress) bool {
-	if this == that {
-		return true
-	} else if this == nil || that == nil {
-		return false
-	}
-	if !this.Identity.EqualVT(that.Identity) {
-		return false
-	}
-	return string(this.unknownFields) == string(that.unknownFields)
-}
-
-func (this *VirtualAddress) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*VirtualAddress)
-	if !ok {
-		return false
-	}
-	return this.EqualVT(that)
-}
-func (this *Dropzone) EqualVT(that *Dropzone) bool {
+func (this *DropZone) EqualVT(that *DropZone) bool {
 	if this == that {
 		return true
 	} else if this == nil || that == nil {
@@ -521,20 +486,23 @@ func (this *Dropzone) EqualVT(that *Dropzone) bool {
 	return string(this.unknownFields) == string(that.unknownFields)
 }
 
-func (this *Dropzone) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*Dropzone)
+func (this *DropZone) EqualMessageVT(thatMsg proto.Message) bool {
+	that, ok := thatMsg.(*DropZone)
 	if !ok {
 		return false
 	}
 	return this.EqualVT(that)
 }
-func (this *DropzoneSet) EqualVT(that *DropzoneSet) bool {
+func (this *DropZoneSet) EqualVT(that *DropZoneSet) bool {
 	if this == that {
 		return true
 	} else if this == nil || that == nil {
 		return false
 	}
 	if string(this.VirtualAddress) != string(that.VirtualAddress) {
+		return false
+	}
+	if !this.Identity.EqualVT(that.Identity) {
 		return false
 	}
 	if this.Timestamp != that.Timestamp {
@@ -547,10 +515,10 @@ func (this *DropzoneSet) EqualVT(that *DropzoneSet) bool {
 		vy := that.Dropzones[i]
 		if p, q := vx, vy; p != q {
 			if p == nil {
-				p = &Dropzone{}
+				p = &DropZone{}
 			}
 			if q == nil {
-				q = &Dropzone{}
+				q = &DropZone{}
 			}
 			if !p.EqualVT(q) {
 				return false
@@ -560,14 +528,14 @@ func (this *DropzoneSet) EqualVT(that *DropzoneSet) bool {
 	return string(this.unknownFields) == string(that.unknownFields)
 }
 
-func (this *DropzoneSet) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*DropzoneSet)
+func (this *DropZoneSet) EqualMessageVT(thatMsg proto.Message) bool {
+	that, ok := thatMsg.(*DropZoneSet)
 	if !ok {
 		return false
 	}
 	return this.EqualVT(that)
 }
-func (this *SignedDropzoneSet) EqualVT(that *SignedDropzoneSet) bool {
+func (this *SignedDropZoneSet) EqualVT(that *SignedDropZoneSet) bool {
 	if this == that {
 		return true
 	} else if this == nil || that == nil {
@@ -582,8 +550,8 @@ func (this *SignedDropzoneSet) EqualVT(that *SignedDropzoneSet) bool {
 	return string(this.unknownFields) == string(that.unknownFields)
 }
 
-func (this *SignedDropzoneSet) EqualMessageVT(thatMsg proto.Message) bool {
-	that, ok := thatMsg.(*SignedDropzoneSet)
+func (this *SignedDropZoneSet) EqualMessageVT(thatMsg proto.Message) bool {
+	that, ok := thatMsg.(*SignedDropZoneSet)
 	if !ok {
 		return false
 	}
@@ -660,6 +628,51 @@ func (m *IdentityKey) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.KeyId))
 		i--
 		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Identity) MarshalVT() (dAtA []byte, err error) {
+	if m == nil {
+		return nil, nil
+	}
+	size := m.SizeVT()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Identity) MarshalToVT(dAtA []byte) (int, error) {
+	size := m.SizeVT()
+	return m.MarshalToSizedBufferVT(dAtA[:size])
+}
+
+func (m *Identity) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+	if m == nil {
+		return 0, nil
+	}
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.unknownFields != nil {
+		i -= len(m.unknownFields)
+		copy(dAtA[i:], m.unknownFields)
+	}
+	if len(m.PublicKeys) > 0 {
+		for iNdEx := len(m.PublicKeys) - 1; iNdEx >= 0; iNdEx-- {
+			size, err := m.PublicKeys[iNdEx].MarshalToSizedBufferVT(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -752,51 +765,6 @@ func (m *MultiSignature) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	if len(m.Signatures) > 0 {
 		for iNdEx := len(m.Signatures) - 1; iNdEx >= 0; iNdEx-- {
 			size, err := m.Signatures[iNdEx].MarshalToSizedBufferVT(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Identity) MarshalVT() (dAtA []byte, err error) {
-	if m == nil {
-		return nil, nil
-	}
-	size := m.SizeVT()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Identity) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
-}
-
-func (m *Identity) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
-	if m == nil {
-		return 0, nil
-	}
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
-	}
-	if len(m.PublicKeys) > 0 {
-		for iNdEx := len(m.PublicKeys) - 1; iNdEx >= 0; iNdEx-- {
-			size, err := m.PublicKeys[iNdEx].MarshalToSizedBufferVT(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -967,7 +935,7 @@ func (m *SignedRouterInfo) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *VirtualAddress) MarshalVT() (dAtA []byte, err error) {
+func (m *DropZone) MarshalVT() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -980,55 +948,12 @@ func (m *VirtualAddress) MarshalVT() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *VirtualAddress) MarshalToVT(dAtA []byte) (int, error) {
+func (m *DropZone) MarshalToVT(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
-func (m *VirtualAddress) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
-	if m == nil {
-		return 0, nil
-	}
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
-	}
-	if m.Identity != nil {
-		size, err := m.Identity.MarshalToSizedBufferVT(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Dropzone) MarshalVT() (dAtA []byte, err error) {
-	if m == nil {
-		return nil, nil
-	}
-	size := m.SizeVT()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Dropzone) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
-}
-
-func (m *Dropzone) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *DropZone) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1057,7 +982,7 @@ func (m *Dropzone) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *DropzoneSet) MarshalVT() (dAtA []byte, err error) {
+func (m *DropZoneSet) MarshalVT() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1070,12 +995,12 @@ func (m *DropzoneSet) MarshalVT() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DropzoneSet) MarshalToVT(dAtA []byte) (int, error) {
+func (m *DropZoneSet) MarshalToVT(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
-func (m *DropzoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *DropZoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1096,13 +1021,23 @@ func (m *DropzoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i -= size
 			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 	}
 	if m.Timestamp != 0 {
 		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.Timestamp))
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x18
+	}
+	if m.Identity != nil {
+		size, err := m.Identity.MarshalToSizedBufferVT(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x12
 	}
 	if len(m.VirtualAddress) > 0 {
 		i -= len(m.VirtualAddress)
@@ -1114,7 +1049,7 @@ func (m *DropzoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SignedDropzoneSet) MarshalVT() (dAtA []byte, err error) {
+func (m *SignedDropZoneSet) MarshalVT() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1127,12 +1062,12 @@ func (m *SignedDropzoneSet) MarshalVT() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SignedDropzoneSet) MarshalToVT(dAtA []byte) (int, error) {
+func (m *SignedDropZoneSet) MarshalToVT(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
-func (m *SignedDropzoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *SignedDropZoneSet) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1268,6 +1203,51 @@ func (m *IdentityKey) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Identity) MarshalVTStrict() (dAtA []byte, err error) {
+	if m == nil {
+		return nil, nil
+	}
+	size := m.SizeVT()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBufferVTStrict(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Identity) MarshalToVTStrict(dAtA []byte) (int, error) {
+	size := m.SizeVT()
+	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
+}
+
+func (m *Identity) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+	if m == nil {
+		return 0, nil
+	}
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.unknownFields != nil {
+		i -= len(m.unknownFields)
+		copy(dAtA[i:], m.unknownFields)
+	}
+	if len(m.PublicKeys) > 0 {
+		for iNdEx := len(m.PublicKeys) - 1; iNdEx >= 0; iNdEx-- {
+			size, err := m.PublicKeys[iNdEx].MarshalToSizedBufferVTStrict(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *Signature) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
@@ -1356,51 +1336,6 @@ func (m *MultiSignature) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) 
 	if len(m.Signatures) > 0 {
 		for iNdEx := len(m.Signatures) - 1; iNdEx >= 0; iNdEx-- {
 			size, err := m.Signatures[iNdEx].MarshalToSizedBufferVTStrict(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Identity) MarshalVTStrict() (dAtA []byte, err error) {
-	if m == nil {
-		return nil, nil
-	}
-	size := m.SizeVT()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVTStrict(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Identity) MarshalToVTStrict(dAtA []byte) (int, error) {
-	size := m.SizeVT()
-	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
-}
-
-func (m *Identity) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
-	if m == nil {
-		return 0, nil
-	}
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
-	}
-	if len(m.PublicKeys) > 0 {
-		for iNdEx := len(m.PublicKeys) - 1; iNdEx >= 0; iNdEx-- {
-			size, err := m.PublicKeys[iNdEx].MarshalToSizedBufferVTStrict(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1571,7 +1506,7 @@ func (m *SignedRouterInfo) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
-func (m *VirtualAddress) MarshalVTStrict() (dAtA []byte, err error) {
+func (m *DropZone) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1584,55 +1519,12 @@ func (m *VirtualAddress) MarshalVTStrict() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *VirtualAddress) MarshalToVTStrict(dAtA []byte) (int, error) {
+func (m *DropZone) MarshalToVTStrict(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
 }
 
-func (m *VirtualAddress) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
-	if m == nil {
-		return 0, nil
-	}
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
-	}
-	if m.Identity != nil {
-		size, err := m.Identity.MarshalToSizedBufferVTStrict(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Dropzone) MarshalVTStrict() (dAtA []byte, err error) {
-	if m == nil {
-		return nil, nil
-	}
-	size := m.SizeVT()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVTStrict(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Dropzone) MarshalToVTStrict(dAtA []byte) (int, error) {
-	size := m.SizeVT()
-	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
-}
-
-func (m *Dropzone) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+func (m *DropZone) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1661,7 +1553,7 @@ func (m *Dropzone) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *DropzoneSet) MarshalVTStrict() (dAtA []byte, err error) {
+func (m *DropZoneSet) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1674,12 +1566,12 @@ func (m *DropzoneSet) MarshalVTStrict() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DropzoneSet) MarshalToVTStrict(dAtA []byte) (int, error) {
+func (m *DropZoneSet) MarshalToVTStrict(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
 }
 
-func (m *DropzoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+func (m *DropZoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1700,13 +1592,23 @@ func (m *DropzoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 			i -= size
 			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 	}
 	if m.Timestamp != 0 {
 		i = protohelpers.EncodeVarint(dAtA, i, uint64(m.Timestamp))
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x18
+	}
+	if m.Identity != nil {
+		size, err := m.Identity.MarshalToSizedBufferVTStrict(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x12
 	}
 	if len(m.VirtualAddress) > 0 {
 		i -= len(m.VirtualAddress)
@@ -1718,7 +1620,7 @@ func (m *DropzoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SignedDropzoneSet) MarshalVTStrict() (dAtA []byte, err error) {
+func (m *SignedDropZoneSet) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1731,12 +1633,12 @@ func (m *SignedDropzoneSet) MarshalVTStrict() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SignedDropzoneSet) MarshalToVTStrict(dAtA []byte) (int, error) {
+func (m *SignedDropZoneSet) MarshalToVTStrict(dAtA []byte) (int, error) {
 	size := m.SizeVT()
 	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
 }
 
-func (m *SignedDropzoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+func (m *SignedDropZoneSet) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -1842,6 +1744,22 @@ func (m *IdentityKey) SizeVT() (n int) {
 	return n
 }
 
+func (m *Identity) SizeVT() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.PublicKeys) > 0 {
+		for _, e := range m.PublicKeys {
+			l = e.SizeVT()
+			n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+		}
+	}
+	n += len(m.unknownFields)
+	return n
+}
+
 func (m *Signature) SizeVT() (n int) {
 	if m == nil {
 		return 0
@@ -1873,22 +1791,6 @@ func (m *MultiSignature) SizeVT() (n int) {
 	_ = l
 	if len(m.Signatures) > 0 {
 		for _, e := range m.Signatures {
-			l = e.SizeVT()
-			n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
-		}
-	}
-	n += len(m.unknownFields)
-	return n
-}
-
-func (m *Identity) SizeVT() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.PublicKeys) > 0 {
-		for _, e := range m.PublicKeys {
 			l = e.SizeVT()
 			n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
 		}
@@ -1959,21 +1861,7 @@ func (m *SignedRouterInfo) SizeVT() (n int) {
 	return n
 }
 
-func (m *VirtualAddress) SizeVT() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Identity != nil {
-		l = m.Identity.SizeVT()
-		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
-	}
-	n += len(m.unknownFields)
-	return n
-}
-
-func (m *Dropzone) SizeVT() (n int) {
+func (m *DropZone) SizeVT() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1991,7 +1879,7 @@ func (m *Dropzone) SizeVT() (n int) {
 	return n
 }
 
-func (m *DropzoneSet) SizeVT() (n int) {
+func (m *DropZoneSet) SizeVT() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1999,6 +1887,10 @@ func (m *DropzoneSet) SizeVT() (n int) {
 	_ = l
 	l = len(m.VirtualAddress)
 	if l > 0 {
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.Identity != nil {
+		l = m.Identity.SizeVT()
 		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
 	}
 	if m.Timestamp != 0 {
@@ -2014,7 +1906,7 @@ func (m *DropzoneSet) SizeVT() (n int) {
 	return n
 }
 
-func (m *SignedDropzoneSet) SizeVT() (n int) {
+func (m *SignedDropZoneSet) SizeVT() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2153,6 +2045,91 @@ func (m *IdentityKey) UnmarshalVT(dAtA []byte) error {
 			m.PublicKey = append(m.PublicKey[:0], dAtA[iNdEx:postIndex]...)
 			if m.PublicKey == nil {
 				m.PublicKey = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Identity) UnmarshalVT(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return protohelpers.ErrIntOverflow
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Identity: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Identity: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicKeys", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicKeys = append(m.PublicKeys, &IdentityKey{})
+			if err := m.PublicKeys[len(m.PublicKeys)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
 			iNdEx = postIndex
 		default:
@@ -2379,91 +2356,6 @@ func (m *MultiSignature) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Signatures = append(m.Signatures, &Signature{})
 			if err := m.Signatures[len(m.Signatures)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Identity) UnmarshalVT(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return protohelpers.ErrIntOverflow
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Identity: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Identity: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PublicKeys", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PublicKeys = append(m.PublicKeys, &IdentityKey{})
-			if err := m.PublicKeys[len(m.PublicKeys)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2901,7 +2793,7 @@ func (m *SignedRouterInfo) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *VirtualAddress) UnmarshalVT(dAtA []byte) error {
+func (m *DropZone) UnmarshalVT(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2924,97 +2816,10 @@ func (m *VirtualAddress) UnmarshalVT(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: VirtualAddress: wiretype end group for non-group")
+			return fmt.Errorf("proto: DropZone: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: VirtualAddress: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Identity == nil {
-				m.Identity = &Identity{}
-			}
-			if err := m.Identity.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Dropzone) UnmarshalVT(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return protohelpers.ErrIntOverflow
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Dropzone: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Dropzone: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DropZone: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3107,7 +2912,7 @@ func (m *Dropzone) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
+func (m *DropZoneSet) UnmarshalVT(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3130,10 +2935,10 @@ func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DropzoneSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: DropZoneSet: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DropzoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DropZoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3171,6 +2976,42 @@ func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Identity == nil {
+				m.Identity = &Identity{}
+			}
+			if err := m.Identity.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
 			}
@@ -3189,7 +3030,7 @@ func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Dropzones", wireType)
 			}
@@ -3218,7 +3059,7 @@ func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Dropzones = append(m.Dropzones, &Dropzone{})
+			m.Dropzones = append(m.Dropzones, &DropZone{})
 			if err := m.Dropzones[len(m.Dropzones)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3245,7 +3086,7 @@ func (m *DropzoneSet) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SignedDropzoneSet) UnmarshalVT(dAtA []byte) error {
+func (m *SignedDropZoneSet) UnmarshalVT(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3268,10 +3109,10 @@ func (m *SignedDropzoneSet) UnmarshalVT(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SignedDropzoneSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignedDropZoneSet: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SignedDropzoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignedDropZoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3639,6 +3480,91 @@ func (m *IdentityKey) UnmarshalVTUnsafe(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *Identity) UnmarshalVTUnsafe(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return protohelpers.ErrIntOverflow
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Identity: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Identity: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicKeys", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicKeys = append(m.PublicKeys, &IdentityKey{})
+			if err := m.PublicKeys[len(m.PublicKeys)-1].UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *Signature) UnmarshalVTUnsafe(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3838,91 +3764,6 @@ func (m *MultiSignature) UnmarshalVTUnsafe(dAtA []byte) error {
 			}
 			m.Signatures = append(m.Signatures, &Signature{})
 			if err := m.Signatures[len(m.Signatures)-1].UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Identity) UnmarshalVTUnsafe(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return protohelpers.ErrIntOverflow
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Identity: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Identity: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PublicKeys", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PublicKeys = append(m.PublicKeys, &IdentityKey{})
-			if err := m.PublicKeys[len(m.PublicKeys)-1].UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4354,7 +4195,7 @@ func (m *SignedRouterInfo) UnmarshalVTUnsafe(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *VirtualAddress) UnmarshalVTUnsafe(dAtA []byte) error {
+func (m *DropZone) UnmarshalVTUnsafe(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4377,97 +4218,10 @@ func (m *VirtualAddress) UnmarshalVTUnsafe(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: VirtualAddress: wiretype end group for non-group")
+			return fmt.Errorf("proto: DropZone: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: VirtualAddress: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Identity == nil {
-				m.Identity = &Identity{}
-			}
-			if err := m.Identity.UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := protohelpers.Skip(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return protohelpers.ErrInvalidLength
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Dropzone) UnmarshalVTUnsafe(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return protohelpers.ErrIntOverflow
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Dropzone: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Dropzone: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DropZone: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4554,7 +4308,7 @@ func (m *Dropzone) UnmarshalVTUnsafe(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
+func (m *DropZoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4577,10 +4331,10 @@ func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DropzoneSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: DropZoneSet: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DropzoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DropZoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4615,6 +4369,42 @@ func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 			m.VirtualAddress = dAtA[iNdEx:postIndex]
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Identity", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Identity == nil {
+				m.Identity = &Identity{}
+			}
+			if err := m.Identity.UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
 			}
@@ -4633,7 +4423,7 @@ func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 					break
 				}
 			}
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Dropzones", wireType)
 			}
@@ -4662,7 +4452,7 @@ func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Dropzones = append(m.Dropzones, &Dropzone{})
+			m.Dropzones = append(m.Dropzones, &DropZone{})
 			if err := m.Dropzones[len(m.Dropzones)-1].UnmarshalVTUnsafe(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4689,7 +4479,7 @@ func (m *DropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SignedDropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
+func (m *SignedDropZoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4712,10 +4502,10 @@ func (m *SignedDropzoneSet) UnmarshalVTUnsafe(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SignedDropzoneSet: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignedDropZoneSet: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SignedDropzoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignedDropZoneSet: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

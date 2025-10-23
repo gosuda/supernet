@@ -456,6 +456,51 @@ func (x *IdentityKey) GetPublicKey() []byte {
 	return nil
 }
 
+// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
+type Identity struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PublicKeys    []*IdentityKey         `protobuf:"bytes,1,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Identity) Reset() {
+	*x = Identity{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Identity) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Identity) ProtoMessage() {}
+
+func (x *Identity) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Identity.ProtoReflect.Descriptor instead.
+func (*Identity) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Identity) GetPublicKeys() []*IdentityKey {
+	if x != nil {
+		return x.PublicKeys
+	}
+	return nil
+}
+
 // Signature contains the signature bytes along with the key ID, signature algorithm, and digest algorithm used for verification.
 type Signature struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -469,7 +514,7 @@ type Signature struct {
 
 func (x *Signature) Reset() {
 	*x = Signature{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[1]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -481,7 +526,7 @@ func (x *Signature) String() string {
 func (*Signature) ProtoMessage() {}
 
 func (x *Signature) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[1]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -494,7 +539,7 @@ func (x *Signature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Signature.ProtoReflect.Descriptor instead.
 func (*Signature) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{1}
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Signature) GetKeyId() uint64 {
@@ -534,7 +579,7 @@ type MultiSignature struct {
 
 func (x *MultiSignature) Reset() {
 	*x = MultiSignature{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -546,7 +591,7 @@ func (x *MultiSignature) String() string {
 func (*MultiSignature) ProtoMessage() {}
 
 func (x *MultiSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[2]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -559,57 +604,12 @@ func (x *MultiSignature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MultiSignature.ProtoReflect.Descriptor instead.
 func (*MultiSignature) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{2}
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *MultiSignature) GetSignatures() []*Signature {
 	if x != nil {
 		return x.Signatures
-	}
-	return nil
-}
-
-// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
-type Identity struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PublicKeys    []*IdentityKey         `protobuf:"bytes,1,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Identity) Reset() {
-	*x = Identity{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Identity) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Identity) ProtoMessage() {}
-
-func (x *Identity) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Identity.ProtoReflect.Descriptor instead.
-func (*Identity) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *Identity) GetPublicKeys() []*IdentityKey {
-	if x != nil {
-		return x.PublicKeys
 	}
 	return nil
 }
@@ -760,53 +760,8 @@ func (x *SignedRouterInfo) GetSignature() *MultiSignature {
 	return nil
 }
 
-// VirtualAddress represents a virtual address in the network.
-type VirtualAddress struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Identity      *Identity              `protobuf:"bytes,1,opt,name=identity,proto3" json:"identity,omitempty"` // Identity of the virtual address
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VirtualAddress) Reset() {
-	*x = VirtualAddress{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VirtualAddress) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VirtualAddress) ProtoMessage() {}
-
-func (x *VirtualAddress) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VirtualAddress.ProtoReflect.Descriptor instead.
-func (*VirtualAddress) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *VirtualAddress) GetIdentity() *Identity {
-	if x != nil {
-		return x.Identity
-	}
-	return nil
-}
-
-// Dropzone is a logical home for a virtual address.
-type Dropzone struct {
+// DropZone is a logical home for a virtual address.
+type DropZone struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RouterId      []byte                 `protobuf:"bytes,1,opt,name=router_id,json=routerId,proto3" json:"router_id,omitempty"` // 128-bit router id
 	TunnelId      []byte                 `protobuf:"bytes,2,opt,name=tunnel_id,json=tunnelId,proto3" json:"tunnel_id,omitempty"` // 128-bit tunnel id
@@ -814,21 +769,21 @@ type Dropzone struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Dropzone) Reset() {
-	*x = Dropzone{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
+func (x *DropZone) Reset() {
+	*x = DropZone{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Dropzone) String() string {
+func (x *DropZone) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Dropzone) ProtoMessage() {}
+func (*DropZone) ProtoMessage() {}
 
-func (x *Dropzone) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
+func (x *DropZone) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -839,50 +794,51 @@ func (x *Dropzone) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Dropzone.ProtoReflect.Descriptor instead.
-func (*Dropzone) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{7}
+// Deprecated: Use DropZone.ProtoReflect.Descriptor instead.
+func (*DropZone) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *Dropzone) GetRouterId() []byte {
+func (x *DropZone) GetRouterId() []byte {
 	if x != nil {
 		return x.RouterId
 	}
 	return nil
 }
 
-func (x *Dropzone) GetTunnelId() []byte {
+func (x *DropZone) GetTunnelId() []byte {
 	if x != nil {
 		return x.TunnelId
 	}
 	return nil
 }
 
-// DropzoneSet is a set of dropzones for a virtual address.
-type DropzoneSet struct {
+// DropZoneSet is a set of dropzones for a virtual address.
+type DropZoneSet struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	VirtualAddress []byte                 `protobuf:"bytes,1,opt,name=virtual_address,json=virtualAddress,proto3" json:"virtual_address,omitempty"` // 128-bit virtual address id
-	Timestamp      int64                  `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                // Timestamp of the dropzone set
-	Dropzones      []*Dropzone            `protobuf:"bytes,3,rep,name=dropzones,proto3" json:"dropzones,omitempty"`                                 // List of dropzones for the virtual address
+	VirtualAddress []byte                 `protobuf:"bytes,1,opt,name=virtual_address,json=virtualAddress,proto3" json:"virtual_address,omitempty"` // 128-bit virtual address
+	Identity       *Identity              `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`                                   // Identity of the virtual address
+	Timestamp      int64                  `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                // Timestamp of the dropzone set
+	Dropzones      []*DropZone            `protobuf:"bytes,4,rep,name=dropzones,proto3" json:"dropzones,omitempty"`                                 // List of dropzones for the virtual address
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
-func (x *DropzoneSet) Reset() {
-	*x = DropzoneSet{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
+func (x *DropZoneSet) Reset() {
+	*x = DropZoneSet{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DropzoneSet) String() string {
+func (x *DropZoneSet) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DropzoneSet) ProtoMessage() {}
+func (*DropZoneSet) ProtoMessage() {}
 
-func (x *DropzoneSet) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
+func (x *DropZoneSet) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -893,56 +849,63 @@ func (x *DropzoneSet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DropzoneSet.ProtoReflect.Descriptor instead.
-func (*DropzoneSet) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{8}
+// Deprecated: Use DropZoneSet.ProtoReflect.Descriptor instead.
+func (*DropZoneSet) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *DropzoneSet) GetVirtualAddress() []byte {
+func (x *DropZoneSet) GetVirtualAddress() []byte {
 	if x != nil {
 		return x.VirtualAddress
 	}
 	return nil
 }
 
-func (x *DropzoneSet) GetTimestamp() int64 {
+func (x *DropZoneSet) GetIdentity() *Identity {
+	if x != nil {
+		return x.Identity
+	}
+	return nil
+}
+
+func (x *DropZoneSet) GetTimestamp() int64 {
 	if x != nil {
 		return x.Timestamp
 	}
 	return 0
 }
 
-func (x *DropzoneSet) GetDropzones() []*Dropzone {
+func (x *DropZoneSet) GetDropzones() []*DropZone {
 	if x != nil {
 		return x.Dropzones
 	}
 	return nil
 }
 
-// SignedDropzoneSet is a DropzoneSet message signed by the router's identity.
-type SignedDropzoneSet struct {
+// SignedDropZoneSet is a DropZoneSet message signed by the router's identity.
+type SignedDropZoneSet struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	DropzoneSet   []byte                 `protobuf:"bytes,1,opt,name=dropzone_set,json=dropzoneSet,proto3" json:"dropzone_set,omitempty"` // DropzoneSet message serialized to bytes.
-	Signature     *MultiSignature        `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`                        // MultiSignature of the DropzoneSet message. (policy: any)
+	DropzoneSet   []byte                 `protobuf:"bytes,1,opt,name=dropzone_set,json=dropzoneSet,proto3" json:"dropzone_set,omitempty"` // DropZoneSet message serialized to bytes.
+	Signature     *MultiSignature        `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`                        // MultiSignature of the DropZoneSet message. (policy: any)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SignedDropzoneSet) Reset() {
-	*x = SignedDropzoneSet{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
+func (x *SignedDropZoneSet) Reset() {
+	*x = SignedDropZoneSet{}
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SignedDropzoneSet) String() string {
+func (x *SignedDropZoneSet) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SignedDropzoneSet) ProtoMessage() {}
+func (*SignedDropZoneSet) ProtoMessage() {}
 
-func (x *SignedDropzoneSet) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
+func (x *SignedDropZoneSet) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -953,19 +916,19 @@ func (x *SignedDropzoneSet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SignedDropzoneSet.ProtoReflect.Descriptor instead.
-func (*SignedDropzoneSet) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{9}
+// Deprecated: Use SignedDropZoneSet.ProtoReflect.Descriptor instead.
+func (*SignedDropZoneSet) Descriptor() ([]byte, []int) {
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *SignedDropzoneSet) GetDropzoneSet() []byte {
+func (x *SignedDropZoneSet) GetDropzoneSet() []byte {
 	if x != nil {
 		return x.DropzoneSet
 	}
 	return nil
 }
 
-func (x *SignedDropzoneSet) GetSignature() *MultiSignature {
+func (x *SignedDropZoneSet) GetSignature() *MultiSignature {
 	if x != nil {
 		return x.Signature
 	}
@@ -984,7 +947,7 @@ type TunnelDescriptor struct {
 
 func (x *TunnelDescriptor) Reset() {
 	*x = TunnelDescriptor{}
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[10]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -996,7 +959,7 @@ func (x *TunnelDescriptor) String() string {
 func (*TunnelDescriptor) ProtoMessage() {}
 
 func (x *TunnelDescriptor) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[10]
+	mi := &file_proto_snverb_v1alpha1_snverb_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1009,7 +972,7 @@ func (x *TunnelDescriptor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TunnelDescriptor.ProtoReflect.Descriptor instead.
 func (*TunnelDescriptor) Descriptor() ([]byte, []int) {
-	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{10}
+	return file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *TunnelDescriptor) GetTunnelId() []byte {
@@ -1042,7 +1005,10 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\x06key_id\x18\x01 \x01(\x04R\x05keyId\x128\n" +
 	"\talgorithm\x18\x02 \x01(\x0e2\x1a.snverb.SignatureAlgorithmR\talgorithm\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x03 \x01(\fR\tpublicKey\"\xbe\x01\n" +
+	"public_key\x18\x03 \x01(\fR\tpublicKey\"@\n" +
+	"\bIdentity\x124\n" +
+	"\vpublic_keys\x18\x01 \x03(\v2\x13.snverb.IdentityKeyR\n" +
+	"publicKeys\"\xbe\x01\n" +
 	"\tSignature\x12\x15\n" +
 	"\x06key_id\x18\x01 \x01(\x04R\x05keyId\x128\n" +
 	"\talgorithm\x18\x02 \x01(\x0e2\x1a.snverb.SignatureAlgorithmR\talgorithm\x12B\n" +
@@ -1051,10 +1017,7 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\x0eMultiSignature\x121\n" +
 	"\n" +
 	"signatures\x18\x01 \x03(\v2\x11.snverb.SignatureR\n" +
-	"signatures\"@\n" +
-	"\bIdentity\x124\n" +
-	"\vpublic_keys\x18\x01 \x03(\v2\x13.snverb.IdentityKeyR\n" +
-	"publicKeys\"\xb1\x02\n" +
+	"signatures\"\xb1\x02\n" +
 	"\n" +
 	"RouterInfo\x12\x1b\n" +
 	"\trouter_id\x18\x01 \x01(\fR\brouterId\x12,\n" +
@@ -1067,17 +1030,16 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\x10SignedRouterInfo\x12\x1f\n" +
 	"\vrouter_info\x18\x01 \x01(\fR\n" +
 	"routerInfo\x124\n" +
-	"\tsignature\x18\x02 \x01(\v2\x16.snverb.MultiSignatureR\tsignature\">\n" +
-	"\x0eVirtualAddress\x12,\n" +
-	"\bidentity\x18\x01 \x01(\v2\x10.snverb.IdentityR\bidentity\"D\n" +
-	"\bDropzone\x12\x1b\n" +
+	"\tsignature\x18\x02 \x01(\v2\x16.snverb.MultiSignatureR\tsignature\"D\n" +
+	"\bDropZone\x12\x1b\n" +
 	"\trouter_id\x18\x01 \x01(\fR\brouterId\x12\x1b\n" +
-	"\ttunnel_id\x18\x02 \x01(\fR\btunnelId\"\x84\x01\n" +
-	"\vDropzoneSet\x12'\n" +
-	"\x0fvirtual_address\x18\x01 \x01(\fR\x0evirtualAddress\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\x12.\n" +
-	"\tdropzones\x18\x03 \x03(\v2\x10.snverb.DropzoneR\tdropzones\"l\n" +
-	"\x11SignedDropzoneSet\x12!\n" +
+	"\ttunnel_id\x18\x02 \x01(\fR\btunnelId\"\xb2\x01\n" +
+	"\vDropZoneSet\x12'\n" +
+	"\x0fvirtual_address\x18\x01 \x01(\fR\x0evirtualAddress\x12,\n" +
+	"\bidentity\x18\x02 \x01(\v2\x10.snverb.IdentityR\bidentity\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\x12.\n" +
+	"\tdropzones\x18\x04 \x03(\v2\x10.snverb.DropZoneR\tdropzones\"l\n" +
+	"\x11SignedDropZoneSet\x12!\n" +
 	"\fdropzone_set\x18\x01 \x01(\fR\vdropzoneSet\x124\n" +
 	"\tsignature\x18\x02 \x01(\v2\x16.snverb.MultiSignatureR\tsignature\"i\n" +
 	"\x10TunnelDescriptor\x12\x1b\n" +
@@ -1147,7 +1109,7 @@ func file_proto_snverb_v1alpha1_snverb_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_snverb_v1alpha1_snverb_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
-var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_snverb_v1alpha1_snverb_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
 	(SignatureAlgorithm)(0),      // 0: snverb.SignatureAlgorithm
 	(DigestAlgorithm)(0),         // 1: snverb.DigestAlgorithm
@@ -1156,32 +1118,31 @@ var file_proto_snverb_v1alpha1_snverb_proto_goTypes = []any{
 	(RouterClass)(0),             // 4: snverb.RouterClass
 	(RouterFeature)(0),           // 5: snverb.RouterFeature
 	(*IdentityKey)(nil),          // 6: snverb.IdentityKey
-	(*Signature)(nil),            // 7: snverb.Signature
-	(*MultiSignature)(nil),       // 8: snverb.MultiSignature
-	(*Identity)(nil),             // 9: snverb.Identity
+	(*Identity)(nil),             // 7: snverb.Identity
+	(*Signature)(nil),            // 8: snverb.Signature
+	(*MultiSignature)(nil),       // 9: snverb.MultiSignature
 	(*RouterInfo)(nil),           // 10: snverb.RouterInfo
 	(*SignedRouterInfo)(nil),     // 11: snverb.SignedRouterInfo
-	(*VirtualAddress)(nil),       // 12: snverb.VirtualAddress
-	(*Dropzone)(nil),             // 13: snverb.Dropzone
-	(*DropzoneSet)(nil),          // 14: snverb.DropzoneSet
-	(*SignedDropzoneSet)(nil),    // 15: snverb.SignedDropzoneSet
-	(*TunnelDescriptor)(nil),     // 16: snverb.TunnelDescriptor
-	(*v1alpha1.AddressList)(nil), // 17: maddr.AddressList
+	(*DropZone)(nil),             // 12: snverb.DropZone
+	(*DropZoneSet)(nil),          // 13: snverb.DropZoneSet
+	(*SignedDropZoneSet)(nil),    // 14: snverb.SignedDropZoneSet
+	(*TunnelDescriptor)(nil),     // 15: snverb.TunnelDescriptor
+	(*v1alpha1.AddressList)(nil), // 16: maddr.AddressList
 }
 var file_proto_snverb_v1alpha1_snverb_proto_depIdxs = []int32{
 	0,  // 0: snverb.IdentityKey.algorithm:type_name -> snverb.SignatureAlgorithm
-	0,  // 1: snverb.Signature.algorithm:type_name -> snverb.SignatureAlgorithm
-	1,  // 2: snverb.Signature.digest_algorithm:type_name -> snverb.DigestAlgorithm
-	7,  // 3: snverb.MultiSignature.signatures:type_name -> snverb.Signature
-	6,  // 4: snverb.Identity.public_keys:type_name -> snverb.IdentityKey
-	9,  // 5: snverb.RouterInfo.identity:type_name -> snverb.Identity
-	17, // 6: snverb.RouterInfo.address_list:type_name -> maddr.AddressList
+	6,  // 1: snverb.Identity.public_keys:type_name -> snverb.IdentityKey
+	0,  // 2: snverb.Signature.algorithm:type_name -> snverb.SignatureAlgorithm
+	1,  // 3: snverb.Signature.digest_algorithm:type_name -> snverb.DigestAlgorithm
+	8,  // 4: snverb.MultiSignature.signatures:type_name -> snverb.Signature
+	7,  // 5: snverb.RouterInfo.identity:type_name -> snverb.Identity
+	16, // 6: snverb.RouterInfo.address_list:type_name -> maddr.AddressList
 	4,  // 7: snverb.RouterInfo.router_class:type_name -> snverb.RouterClass
 	5,  // 8: snverb.RouterInfo.features:type_name -> snverb.RouterFeature
-	8,  // 9: snverb.SignedRouterInfo.signature:type_name -> snverb.MultiSignature
-	9,  // 10: snverb.VirtualAddress.identity:type_name -> snverb.Identity
-	13, // 11: snverb.DropzoneSet.dropzones:type_name -> snverb.Dropzone
-	8,  // 12: snverb.SignedDropzoneSet.signature:type_name -> snverb.MultiSignature
+	9,  // 9: snverb.SignedRouterInfo.signature:type_name -> snverb.MultiSignature
+	7,  // 10: snverb.DropZoneSet.identity:type_name -> snverb.Identity
+	12, // 11: snverb.DropZoneSet.dropzones:type_name -> snverb.DropZone
+	9,  // 12: snverb.SignedDropZoneSet.signature:type_name -> snverb.MultiSignature
 	13, // [13:13] is the sub-list for method output_type
 	13, // [13:13] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name
@@ -1200,7 +1161,7 @@ func file_proto_snverb_v1alpha1_snverb_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_snverb_v1alpha1_snverb_proto_rawDesc), len(file_proto_snverb_v1alpha1_snverb_proto_rawDesc)),
 			NumEnums:      6,
-			NumMessages:   11,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

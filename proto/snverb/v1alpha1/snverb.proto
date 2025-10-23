@@ -86,6 +86,11 @@ message IdentityKey {
   bytes public_key = 3;
 }
 
+// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
+message Identity {
+  repeated IdentityKey public_keys = 1;
+}
+
 // Signature contains the signature bytes along with the key ID, signature algorithm, and digest algorithm used for verification.
 message Signature {
   uint64 key_id = 1; // 64-bit key id
@@ -96,11 +101,6 @@ message Signature {
 
 message MultiSignature {
   repeated Signature signatures = 1;
-}
-
-// Identity encapsulates a collection of public keys associated with an entity for authentication and verification purposes.
-message Identity {
-  repeated IdentityKey public_keys = 1;
 }
 
 // RouterClass enumerates the types of router nodes in the network, indicating their level of functionality and resource requirements.
@@ -134,28 +134,24 @@ message SignedRouterInfo {
   MultiSignature signature = 2; // MultiSignature of the RouterInfo message. (policy: any)
 }
 
-// VirtualAddress represents a virtual address in the network.
-message VirtualAddress {
-  Identity identity = 1; // Identity of the virtual address
-}
-
-// Dropzone is a logical home for a virtual address.
-message Dropzone {
+// DropZone is a logical home for a virtual address.
+message DropZone {
   bytes router_id = 1; // 128-bit router id
   bytes tunnel_id = 2; // 128-bit tunnel id
 }
 
-// DropzoneSet is a set of dropzones for a virtual address.
-message DropzoneSet {
-  bytes virtual_address = 1; // 128-bit virtual address id
-  int64 timestamp = 2; // Timestamp of the dropzone set
-  repeated Dropzone dropzones = 3; // List of dropzones for the virtual address
+// DropZoneSet is a set of dropzones for a virtual address.
+message DropZoneSet {
+  bytes virtual_address = 1; // 128-bit virtual address
+  Identity identity = 2; // Identity of the virtual address
+  int64 timestamp = 3; // Timestamp of the dropzone set
+  repeated DropZone dropzones = 4; // List of dropzones for the virtual address
 }
 
-// SignedDropzoneSet is a DropzoneSet message signed by the router's identity.
-message SignedDropzoneSet {
-  bytes dropzone_set = 1; // DropzoneSet message serialized to bytes.
-  MultiSignature signature = 2; // MultiSignature of the DropzoneSet message. (policy: any)
+// SignedDropZoneSet is a DropZoneSet message signed by the router's identity.
+message SignedDropZoneSet {
+  bytes dropzone_set = 1; // DropZoneSet message serialized to bytes.
+  MultiSignature signature = 2; // MultiSignature of the DropZoneSet message. (policy: any)
 }
 
 // TunnelDescriptor represents a tunnel between two endpoints, including the tunnel ID, destination, and source.
