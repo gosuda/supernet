@@ -285,9 +285,9 @@ const file_proto_maddr_v1alpha1_maddr_proto_rawDesc = "" +
 	"\rPROTOCOL_LORA\x10\x16\x12\x12\n" +
 	"\x0ePROTOCOL_ZWAVE\x10\x17\x12\x13\n" +
 	"\x0fPROTOCOL_ZIGBEE\x10\x18\x12\x14\n" +
-	"\x10PROTOCOL_SNRELAY\x10\x1eB{\n" +
+	"\x10PROTOCOL_SNRELAY\x10\x1eB~\n" +
 	"\tcom.maddrB\n" +
-	"MaddrProtoP\x01Z.gosuda.org/supernet/proto/maddr/v1alpha1;maddr\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
+	"MaddrProtoP\x01Z1pkg.gfire.dev/supernet/proto/maddr/v1alpha1;maddr\xa2\x02\x03MXX\xaa\x02\x05Maddr\xca\x02\x05Maddr\xe2\x02\x11Maddr\\GPBMetadata\xea\x02\x05Maddrb\x06proto3"
 
 var (
 	file_proto_maddr_v1alpha1_maddr_proto_rawDescOnce sync.Once

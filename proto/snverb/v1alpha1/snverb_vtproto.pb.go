@@ -9,8 +9,8 @@ import (
 	protohelpers "github.com/planetscale/vtprotobuf/protohelpers"
 	proto "google.golang.org/protobuf/proto"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	v1alpha1 "gosuda.org/supernet/proto/maddr/v1alpha1"
 	io "io"
+	v1alpha1 "pkg.gfire.dev/supernet/proto/maddr/v1alpha1"
 )
 
 const (

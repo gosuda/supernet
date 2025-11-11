@@ -4,7 +4,7 @@ package snverb;
 
 import "proto/maddr/v1alpha1/maddr.proto";
 
-option go_package = "gosuda.org/supernet/proto/snverb/v1alpha1;snverb";
+option go_package = "pkg.gfire.dev/supernet/proto/snverb/v1alpha1;snverb";
 
 // SigningAlgorithm defines various cryptographic algorithms used for signatures, encryption, and hashing.
 enum SignatureAlgorithm {

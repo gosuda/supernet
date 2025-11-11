@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package maddr;
 
-option go_package = "gosuda.org/supernet/proto/maddr/v1alpha1;maddr";
+option go_package = "pkg.gfire.dev/supernet/proto/maddr/v1alpha1;maddr";
 
 enum Protocol {
   PROTOCOL_UNSPECIFIED = 0;

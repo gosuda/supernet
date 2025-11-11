@@ -9,7 +9,7 @@ package snverb
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	v1alpha1 "gosuda.org/supernet/proto/maddr/v1alpha1"
+	v1alpha1 "pkg.gfire.dev/supernet/proto/maddr/v1alpha1"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -1092,9 +1092,9 @@ const file_proto_snverb_v1alpha1_snverb_proto_rawDesc = "" +
 	"\rRouterFeature\x12\f\n" +
 	"\bEXCHANGE\x10\x00\x12\t\n" +
 	"\x05LEASE\x10\x01\x12\t\n" +
-	"\x05RELAY\x10\x02B\x83\x01\n" +
+	"\x05RELAY\x10\x02B\x86\x01\n" +
 	"\n" +
-	"com.snverbB\vSnverbProtoP\x01Z0gosuda.org/supernet/proto/snverb/v1alpha1;snverb\xa2\x02\x03SXX\xaa\x02\x06Snverb\xca\x02\x06Snverb\xe2\x02\x12Snverb\\GPBMetadata\xea\x02\x06Snverbb\x06proto3"
+	"com.snverbB\vSnverbProtoP\x01Z3pkg.gfire.dev/supernet/proto/snverb/v1alpha1;snverb\xa2\x02\x03SXX\xaa\x02\x06Snverb\xca\x02\x06Snverb\xe2\x02\x12Snverb\\GPBMetadata\xea\x02\x06Snverbb\x06proto3"
 
 var (
 	file_proto_snverb_v1alpha1_snverb_proto_rawDescOnce sync.Once

@@ -1,4 +1,4 @@
-module gosuda.org/supernet
+module pkg.gfire.dev/supernet
 
 go 1.25.3
 
